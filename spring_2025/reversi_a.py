@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 import copy
-import random
 import os
-os.environ['TK_SILENCE_DEPRECATION'] = '1'
+
+os.environ["TK_SILENCE_DEPRECATION"] = "1"
 
 """
 盤面を初期化して返す関数
@@ -24,6 +24,8 @@ os.environ['TK_SILENCE_DEPRECATION'] = '1'
 返り値:
 - board: 初期化された盤面（10x10の2次元リスト）
 """
+
+
 def initialize_board():
     board = [[0] * 10 for _ in range(10)]
     for y in range(10):
@@ -36,6 +38,7 @@ def initialize_board():
                 board[y][x] = -1
     print(board)
     return board
+
 
 """
 盤面の状態をコンソールに表示する関数
@@ -53,6 +56,8 @@ def initialize_board():
 返り値:
 - なし。標準出力に盤面の状態を表示する。
 """
+
+
 def print_board(board):
     for y in range(1, 9):
         for x in range(1, 9):
@@ -77,8 +82,11 @@ def print_board(board):
 返り値:
 - 相手プレイヤーの番号（player_numが1なら-1、-1なら1）。
 """
+
+
 def rival_player_num(player_num):
     return -player_num
+
 
 """
 特定方向にひっくり返せる石の数を数える関数
@@ -98,6 +106,8 @@ def rival_player_num(player_num):
 返り値:
 - count: 指定方向でひっくり返せる石の数（整数）。条件を満たさない場合は0。
 """
+
+
 def count_reverse(board, player_num, x_put, y_put, x_direction, y_direction):
     count = 0
     x = x_put + x_direction
@@ -111,6 +121,7 @@ def count_reverse(board, player_num, x_put, y_put, x_direction, y_direction):
     if board[y][x] != player_num:
         return 0
     return count
+
 
 """
 指定された場所に石を置けるか確認する関数
@@ -128,6 +139,8 @@ def count_reverse(board, player_num, x_put, y_put, x_direction, y_direction):
 返り値:
 - 指定位置に石を置ける場合はTrue、置けない場合はFalse。
 """
+
+
 def validate_reversible(board, player_num, x, y):
     if x < 1 or x > 8 or y < 1 or y > 8 or board[y][x] != 0:
         return False
@@ -149,6 +162,7 @@ def validate_reversible(board, player_num, x, y):
         return True
     return False
 
+
 """
 盤面全体で置ける場所があるか確認する関数
 
@@ -163,12 +177,15 @@ def validate_reversible(board, player_num, x, y):
 返り値:
 - 現在のプレイヤーが盤面上で石を置ける場所が存在すればTrue、存在しなければFalse。
 """
+
+
 def validate_reversible_all(board, player_num):
     for y in range(1, 9):
         for x in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 return True
     return False
+
 
 """
 石を置いて盤面を更新する関数
@@ -187,6 +204,8 @@ def validate_reversible_all(board, player_num):
 返り値:
 - new_board: 更新された盤面（10x10の2次元リスト）。
 """
+
+
 def put_disc(board, player_num, x, y):
     new_board = copy.deepcopy(board)
     for i in range(1, count_reverse(new_board, player_num, x, y, 1, 0) + 1):
@@ -208,6 +227,7 @@ def put_disc(board, player_num, x, y):
     new_board[y][x] = player_num
     return new_board
 
+
 """
 各プレイヤーの石の数を数える関数
 
@@ -220,6 +240,8 @@ def put_disc(board, player_num, x, y):
 返り値:
 - discs_list: 黒石の数と白石の数をそれぞれリスト形式で返す。[黒石の数, 白石の数]
 """
+
+
 def count_discs(board):
     black = 0
     white = 0
@@ -231,6 +253,7 @@ def count_discs(board):
                 white += 1
     discs_list = [black, white]
     return discs_list
+
 
 """
 CPUの手を選択する関数
@@ -250,6 +273,7 @@ CPUの手を選択する関数
 - valid_moves: 有効な手が存在する場合は選択された手（タプル (x, y) ）、そうでなければ空のリストを返す。
 """
 
+
 # 実装例：選べる手のうち最初の手を選ぶ（弱い！）
 def cpu_move(board, player_num):
     valid_moves = []
@@ -261,114 +285,147 @@ def cpu_move(board, player_num):
         return valid_moves[0]
     return valid_moves
 
-#TODO: 強いCPUをグループで実装しよう！
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_priority(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-
+    corners = []
+    edges = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-    if corners !=[]:
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+    if corners != []:
         return corners[0]
-    elif edges !=[]:
+    elif edges != []:
         return edges[0]
     elif valid_moves != []:
         return valid_moves[0]
     return valid_moves
 
-#TODO: 強いCPUをグループで実装しよう！
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_central(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-    central=[]
-
+    corners = []
+    edges = []
+    central = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-                if x>2 and x<7 and y>2 and y<7:
-                    central.append((x,y))
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+                if x > 2 and x < 7 and y > 2 and y < 7:
+                    central.append((x, y))
     result = []
-    if corners !=[]:
+    if corners != []:
         result = corners[0]
-    elif central !=[]:
+    elif central != []:
         result = central[0]
-    elif edges !=[]:
+    elif edges != []:
         result = edges[0]
     elif valid_moves != []:
         result = valid_moves[0]
     return result
 
-#TODO: 強いCPUをグループで実装しよう！
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_safe(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-    central=[]
-    safe=[]
+    corners = []
+    edges = []
+    central = []
+    safe = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-                if x>2 and x<7 and y>2 and y<7:
-                    central.append((x,y))
-                if not (x<3 and y<3 or x<3 and y>6 or x>6 and y<3 or x>6 and y>6):
-                    safe.append((x,y))
-    if corners !=[]:
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+                if x > 2 and x < 7 and y > 2 and y < 7:
+                    central.append((x, y))
+                if not (
+                    x < 3
+                    and y < 3
+                    or x < 3
+                    and y > 6
+                    or x > 6
+                    and y < 3
+                    or x > 6
+                    and y > 6
+                ):
+                    safe.append((x, y))
+    if corners != []:
         return corners[0]
-    elif central !=[]:
+    elif central != []:
         return central[0]
-    elif edges !=[]:
+    elif edges != []:
         return edges[0]
-    elif safe !=[]:
+    elif safe != []:
         return safe[0]
     elif valid_moves != []:
         return valid_moves[0]
     return valid_moves
 
-#TODO: 強いCPUをグループで実装しよう！
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_pred(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-    central=[]
-    safe=[]
-    side=[]
+    corners = []
+    edges = []
+    central = []
+    safe = []
+    side = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-                if x>2 and x<7 and y>2 and y<7:
-                    central.append((x,y))
-                if not (x<3 and y<3 or x<3 and y>6 or x>6 and y<3 or x>6 and y>6):
-                    safe.append((x,y))
-                if x==2 and y>2 and y>7 or x==7 and y>2 and y<7 or y==2 and x>2 and x>7 or y==7 and x>2 and x<7:
-                    side.append((x,y))
-                    
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+                if x > 2 and x < 7 and y > 2 and y < 7:
+                    central.append((x, y))
+                if not (
+                    x < 3
+                    and y < 3
+                    or x < 3
+                    and y > 6
+                    or x > 6
+                    and y < 3
+                    or x > 6
+                    and y > 6
+                ):
+                    safe.append((x, y))
+                if (
+                    x == 2
+                    and y > 2
+                    and y > 7
+                    or x == 7
+                    and y > 2
+                    and y < 7
+                    or y == 2
+                    and x > 2
+                    and x > 7
+                    or y == 7
+                    and x > 2
+                    and x < 7
+                ):
+                    side.append((x, y))
+
     # 全部のvalid_movesにおいて，次の手で取れる石の数を数える
     # その数が最大の手を選ぶ
     next_moves = []
@@ -376,12 +433,12 @@ def cpu_move_pred(board, player_num):
         next_board = put_disc(board, player_num, move[0], move[1])
         next_player_num = rival_player_num(player_num)
         next_moves.append(check_next_move_num(next_board, next_player_num))
-    
-    if corners !=[]:
+
+    if corners != []:
         return corners[0]
-    elif central !=[]:
+    elif central != []:
         return central[0]
-    elif safe !=[]:
+    elif safe != []:
         return safe[0]
     else:
         # min_moveを選択
@@ -391,86 +448,127 @@ def cpu_move_pred(board, player_num):
         if min_move_num == 1:
             return valid_moves[next_moves.index(min_move)]
         else:
-            if side !=[]:
+            if side != []:
                 return side[0]
-            elif edges !=[]:
+            elif edges != []:
                 return edges[0]
             elif valid_moves != []:
                 return valid_moves[0]
             return valid_moves
-        
-#TODO: 強いCPUをグループで実装しよう！
+
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_safe(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-    central=[]
-    safe=[]
+    corners = []
+    edges = []
+    central = []
+    safe = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-                if x>2 and x<7 and y>2 and y<7:
-                    central.append((x,y))
-                if not (x<3 and y<3 or x<3 and y>6 or x>6 and y<3 or x>6 and y>6):
-                    safe.append((x,y))
-                    
-    
-    if corners !=[]:
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+                if x > 2 and x < 7 and y > 2 and y < 7:
+                    central.append((x, y))
+                if not (
+                    x < 3
+                    and y < 3
+                    or x < 3
+                    and y > 6
+                    or x > 6
+                    and y < 3
+                    or x > 6
+                    and y > 6
+                ):
+                    safe.append((x, y))
+
+    if corners != []:
         return corners[0]
-    elif central !=[]:
+    elif central != []:
         return central[0]
-    elif edges !=[]:
+    elif edges != []:
         return edges[0]
-    elif safe !=[]:
+    elif safe != []:
         return safe[0]
     elif valid_moves != []:
         return valid_moves[0]
     return valid_moves
 
-#TODO: 強いCPUをグループで実装しよう！
+
+# TODO: 強いCPUをグループで実装しよう！
 def cpu_move_pred_2(board, player_num):
     valid_moves = []
-    corners=[]
-    edges=[]
-    central=[]
-    safe=[]
+    corners = []
+    edges = []
+    central = []
+    safe = []
     safe_corner = []
-    side=[]
+    side = []
 
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
                 valid_moves.append((x, y))
-                if (x,y) in[(1,1),(1,8),(8,1),(8,8)]:
-                    corners.append((x,y))
-                if x==1 or y==1 or x==8 or y==8:
-                    edges.append((x,y))
-                if x>2 and x<7 and y>2 and y<7:
-                    central.append((x,y))
-                if not (x<3 and y<3 or x<3 and y>6 or x>6 and y<3 or x>6 and y>6):
-                    safe.append((x,y))
-                if (x<3 and y<3 or x<3 and y>6 or x>6 and y<3 or x>6 and y>6):
+                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
+                    corners.append((x, y))
+                if x == 1 or y == 1 or x == 8 or y == 8:
+                    edges.append((x, y))
+                if x > 2 and x < 7 and y > 2 and y < 7:
+                    central.append((x, y))
+                if not (
+                    x < 3
+                    and y < 3
+                    or x < 3
+                    and y > 6
+                    or x > 6
+                    and y < 3
+                    or x > 6
+                    and y > 6
+                ):
+                    safe.append((x, y))
+                if (
+                    x < 3
+                    and y < 3
+                    or x < 3
+                    and y > 6
+                    or x > 6
+                    and y < 3
+                    or x > 6
+                    and y > 6
+                ):
                     # その四角が自分のコマなら，safe_cornerに追加
                     target_x, target_y = 0, 0
-                    if x<3:
+                    if x < 3:
                         target_x = 1
-                    if x>6:
+                    if x > 6:
                         target_x = 8
-                    if y<3:
+                    if y < 3:
                         target_y = 1
-                    if y>6:
+                    if y > 6:
                         target_y = 8
                     if board[target_y][target_x] == player_num:
-                        safe_corner.append((x,y))
-                if x==2 and y>2 and y<7 or x==7 and y>2 and y<7 or y==2 and x>2 and x<7 or y==7 and x>2 and x<7:
-                    side.append((x,y))
-                    
+                        safe_corner.append((x, y))
+                if (
+                    x == 2
+                    and y > 2
+                    and y < 7
+                    or x == 7
+                    and y > 2
+                    and y < 7
+                    or y == 2
+                    and x > 2
+                    and x < 7
+                    or y == 7
+                    and x > 2
+                    and x < 7
+                ):
+                    side.append((x, y))
+
     # 全部のvalid_movesにおいて，次の手で取れる石の数を数える
     # その数が最大の手を選ぶ
     next_moves = []
@@ -478,14 +576,14 @@ def cpu_move_pred_2(board, player_num):
         next_board = put_disc(board, player_num, move[0], move[1])
         next_player_num = rival_player_num(player_num)
         next_moves.append(check_next_move_num(next_board, next_player_num))
-    
-    if corners !=[]:
+
+    if corners != []:
         return corners[0]
-    if safe_corner !=[]:
+    if safe_corner != []:
         return safe_corner[0]
-    elif central !=[]:
+    elif central != []:
         return central[0]
-    elif safe !=[]:
+    elif safe != []:
         return safe[0]
     else:
         # min_moveを選択
@@ -495,13 +593,14 @@ def cpu_move_pred_2(board, player_num):
         if min_move_num == 1:
             return valid_moves[next_moves.index(min_move)]
         else:
-            if side !=[]:
+            if side != []:
                 return side[0]
-            elif edges !=[]:
+            elif edges != []:
                 return edges[0]
             elif valid_moves != []:
                 return valid_moves[0]
             return valid_moves
+
 
 def check_next_move_num(board, next_player_num):
     move_num = 0
@@ -512,7 +611,6 @@ def check_next_move_num(board, next_player_num):
     return move_num
 
 
-
 # GUI関数（完成済）
 class ReversiGUI:
     def __init__(self, master):
@@ -521,7 +619,7 @@ class ReversiGUI:
         self.board = initialize_board()
         self.player_num = 1
         self.pass_count = 0
-        
+
         self.cpu_first = False
         self.cpu_second = False
 
@@ -537,7 +635,7 @@ class ReversiGUI:
 
         self.info_label = tk.Label(self.master, text="現在のプレイヤー: ●")
         self.info_label.pack()
-        
+
         self.update_board()
         self.master.update()
 
@@ -548,25 +646,32 @@ class ReversiGUI:
             self.master.after(100, self.check_cpu_move)
 
     def check_cpu_move(self):
-        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1 and self.cpu_second):
+        if (self.player_num == 1 and self.cpu_first) or (
+            self.player_num == -1 and self.cpu_second
+        ):
             self.master.after(100, self.cpu_turn)
-    
+
     def cpu_turn(self):
         # CPUの手番である場合の処理
-        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1 and self.cpu_second):
+        if (self.player_num == 1 and self.cpu_first) or (
+            self.player_num == -1 and self.cpu_second
+        ):
             # TODO この関数を変更
             move = cpu_move_pred_2(self.board, self.player_num)
             if move != []:
                 x, y = move
                 self.board = put_disc(self.board, self.player_num, x, y)
             else:
-                messagebox.showinfo("パス", f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。")
-            
+                messagebox.showinfo(
+                    "パス",
+                    f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
+                )
+
             # back up
             print()
             print(self.board)
             print()
-            
+
             self.player_num = rival_player_num(self.player_num)
             self.pass_count = 0
             self.update_board()
@@ -574,7 +679,16 @@ class ReversiGUI:
                 return
             # 次の手番がCPUの場合、再度チェック
             self.master.after(100, self.check_cpu_move)
-    
+
+        # もしユーザが置ける場所がない場合は再帰する
+        if not validate_reversible_all(self.board, self.player_num):
+            messagebox.showinfo(
+                "パス",
+                f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
+            )
+            self.player_num = rival_player_num(self.player_num)
+            self.cpu_turn()
+
     def update_board(self):
         self.canvas.delete("all")
         for y in range(8):
@@ -582,13 +696,19 @@ class ReversiGUI:
                 x0, y0 = x * 50, y * 50
                 x1, y1 = x0 + 50, y0 + 50
                 self.canvas.create_rectangle(x0, y0, x1, y1, outline="black")
-                cell = self.board[y+1][x+1]
+                cell = self.board[y + 1][x + 1]
                 if cell == 1:
-                    self.canvas.create_oval(x0+5, y0+5, x1-5, y1-5, fill="black")
+                    self.canvas.create_oval(
+                        x0 + 5, y0 + 5, x1 - 5, y1 - 5, fill="black"
+                    )
                 elif cell == -1:
-                    self.canvas.create_oval(x0+5, y0+5, x1-5, y1-5, fill="white")
+                    self.canvas.create_oval(
+                        x0 + 5, y0 + 5, x1 - 5, y1 - 5, fill="white"
+                    )
 
-        self.info_label["text"] = f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'}"
+        self.info_label["text"] = (
+            f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'}"
+        )
 
     def show_result(self):
         black, white = count_discs(self.board)
@@ -598,11 +718,15 @@ class ReversiGUI:
             winner = "○の勝ち"
         else:
             winner = "引き分け"
-        messagebox.showinfo("ゲーム終了", f"ゲーム終了！\n黒: {black}, 白: {white}\n{winner}")
+        messagebox.showinfo(
+            "ゲーム終了", f"ゲーム終了！\n黒: {black}, 白: {white}\n{winner}"
+        )
         self.master.destroy()
 
     def check_game_end(self):
-        if not validate_reversible_all(self.board, 1) and not validate_reversible_all(self.board, -1):
+        if not validate_reversible_all(self.board, 1) and not validate_reversible_all(
+            self.board, -1
+        ):
             self.update_board()
             self.master.after(100, self.show_result)
             return True
@@ -610,9 +734,11 @@ class ReversiGUI:
 
     def on_click(self, event):
         # CPUの手番中はクリックを無視する
-        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1 and self.cpu_second):
+        if (self.player_num == 1 and self.cpu_first) or (
+            self.player_num == -1 and self.cpu_second
+        ):
             return
-        
+
         x = event.x // 50 + 1
         y = event.y // 50 + 1
 
@@ -630,7 +756,10 @@ class ReversiGUI:
         if not validate_reversible_all(self.board, self.player_num):
             self.pass_count += 1
             self.player_num = rival_player_num(self.player_num)
-            messagebox.showinfo("パス", f"{'●' if self.player_num == -1 else '○'}は置ける場所がありません。パスします。")
+            messagebox.showinfo(
+                "パス",
+                f"{'●' if self.player_num == -1 else '○'}は置ける場所がありません。パスします。",
+            )
 
             if self.pass_count == 2:
                 self.update_board()
@@ -641,6 +770,7 @@ class ReversiGUI:
 
         self.update_board()
         self.master.after(100, self.check_cpu_move)  # 次のCPU手番をチェック
+
 
 if __name__ == "__main__":
     root = tk.Tk()
