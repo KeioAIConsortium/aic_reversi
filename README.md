@@ -22,6 +22,22 @@ source .venv/bin/activate
 python main.py
 ```
 
+## アルゴリズムの実装
+`main.py`を開き，`cpu_algorism`関数を編集してください．
+```python
+def cpu_algorism(board, player_num):
+    valid_moves = []  # 置けるマスかを格納するリスト
+    for x in range(1, 9):  # 1行ずつ走査
+        for y in range(1, 9):  # 1列ずつ走査
+            if ReversiGUI.validate_reversible(
+                board, player_num, x, y
+            ):  # その(x,y)座標に石を置けるか判定
+                valid_moves.append((x, y))  # 置けるマスとしてリストに追加
+    if valid_moves != []:  # 置けるマスがある場合
+        return valid_moves[0]
+    return valid_moves
+``` 
+
 ## 🏆 過去の大会
 
 ### 🌸 spring_2025
