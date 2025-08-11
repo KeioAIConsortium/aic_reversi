@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import copy
 import random
+import os
+os.environ['TK_SILENCE_DEPRECATION'] = '1'
 
 """
 盤面を初期化して返す関数
