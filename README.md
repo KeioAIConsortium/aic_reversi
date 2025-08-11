@@ -38,6 +38,18 @@ def cpu_algorism(board, player_num):
     return valid_moves
 ``` 
 
+## 過去モデルとの対戦
+`vs_bestmodel.py`を使用して過去のモデルと対戦できます．
+`cpu_algorism`関数に自分のアルゴリズムを実装してください．
+対戦相手のモデルは，以下（3行目）を変えることで変更できます．
+```python
+from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+```
+### 実行
+```sh
+python vs_bestmodel.py
+```
+
 ## 🏆 過去の大会
 
 ### 🌸 spring_2025
