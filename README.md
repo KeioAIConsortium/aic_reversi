@@ -1,6 +1,6 @@
 # aic_reversi
 
-## 環境構築
+##  1. 環境構築
 ### uvのインストール
 ```sh
 # macOS/Linux
@@ -17,12 +17,12 @@ source .venv/bin/activate
 ```
 - Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
-## Reversiアプリの起動
+## 2. Reversiアプリの起動
 ```sh
 python main.py
 ```
 
-## アルゴリズムの実装
+## 3. アルゴリズムの実装
 `main.py`を開き，`cpu_algorism`関数を編集してください．
 ```python
 def cpu_algorism(board, player_num):
@@ -38,7 +38,7 @@ def cpu_algorism(board, player_num):
     return valid_moves
 ``` 
 
-## 過去モデルとの対戦
+## 4. 過去モデルとの対戦
 `vs_bestmodel.py`を使用して過去のモデルと対戦できます．
 `cpu_algorism`関数に自分のアルゴリズムを実装してください．
 対戦相手のモデルは，以下（3行目）を変えることで変更できます．
