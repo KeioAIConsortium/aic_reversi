@@ -16,13 +16,25 @@ CPUの手を選択する関数
 
 返り値:
 - valid_moves: 有効な手が存在する場合は選択された手（タプル (x, y) ）、そうでなければ空のリストを返す。
+
+過去の優勝モデルと戦う場合：以下を使用
+
+def cpu_algorism(board, player_num):
+    from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+
+    return cpu_move(board, player_num)  # 過去の優勝モデルを使用
 """
 
 
 def cpu_algorism(board, player_num):
-    from spring_2025.best_algorism import cpu_move  # TODO この行を消して実装を行う
-
-    return cpu_move(board, player_num)  # TODO この行を消して実装を行う
+    valid_moves = []
+    for x in range(1, 9):
+        for y in range(1, 9):
+            if ReversiGUI.validate_reversible(board, player_num, x, y):
+                valid_moves.append((x, y))
+    if valid_moves != []:
+        return valid_moves[0]
+    return valid_moves
 
 
 if __name__ == "__main__":
