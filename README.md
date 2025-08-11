@@ -15,13 +15,21 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 uv venv --python 3.11
 source .venv/bin/activate
 ```
+- Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
-## 過去の大会
+## Reversiアプリの起動
+```sh
+python main.py
+```
 
-### 2025_spring
-高校三年生を対象としたPython 初級講座
-CPUを実装し対戦ゲームを実施
+## 🏆 過去の大会
 
-## 2025_aicdays
-一貫校の高校生を対象にしたPython 初級講座
-モジュール化されたコードを用いてCPUを実装
+### 🌸 spring_2025
+高校三年生を対象としたPython初級講座．
+CPUを実装し対戦ゲームを実施．
+👏 **team aが優勝** 👏
+
+### 🍧 aicdays_2025
+一貫校の高校生を対象にしたPython初級講座．
+モジュール化されたコードを用いてCPUを実装．
+👏 **team XXXが優勝** 👏
