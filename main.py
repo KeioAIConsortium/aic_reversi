@@ -40,5 +40,5 @@ def cpu_algorism(board, player_num):
 
 
 if __name__ == "__main__":
-    app = ReversiGUI(cpu_algorism=cpu_algorism, cpu_first=True)
+    app = ReversiGUI(first_algorithm=None, second_algorithm=cpu_algorism)
     app.gui.mainloop()

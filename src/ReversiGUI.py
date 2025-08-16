@@ -1,12 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
+from typing import Callable
+
+Algorithm_type = Callable[[list[list[int]], int], list[int, int]] | None
 
 
 class ReversiGUI:
     def __init__(
         self,
-        cpu_algorism: callable = None,
-        cpu_first: bool = False,  # CPUが先手の場合はTrue、後手の場合はFalse
+        first_algorithm: Algorithm_type,  # 先手の思考アルゴリズム，Noneの場合は手動
+        second_algorithm: Algorithm_type,  # 後手の思考アルゴリズム，Noneの場合は手動
     ):
         """
         cpu_algorism: CPUの思考アルゴリズムを指定する関数
@@ -14,8 +17,8 @@ class ReversiGUI:
             - 引数: player_num: 現在のプレイヤーの番号（1または-1）
             - 返り値: (x, y) の形式で次の手を表すタプル、または置ける手がない場合は空のリスト
         """
-        self.cpu_algorism = cpu_algorism  # CPUの思考アルゴリズム
-        self.cpu_first: bool = cpu_first  # CPUが先手かどうかのフラグ
+        self.first_algorithm = first_algorithm
+        self.second_algorithm = second_algorithm
 
         self.gui = tk.Tk()
         self.gui.title("リバーシ")
@@ -36,7 +39,7 @@ class ReversiGUI:
         self.gui.update()
 
         # CPU先手の場合は、初回に直接CPUの手番を呼び出す
-        if self.cpu_first:
+        if self.first_algorithm is not None:
             self.gui.after(100, self.cpu_turn)
         else:
             self.gui.after(100, self.check_cpu_move)
@@ -191,10 +194,14 @@ class ReversiGUI:
 
     def cpu_turn(self):
         # CPUの手番である場合の処理
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and not self.cpu_first
+        if (self.player_num == 1 and self.first_algorithm is not None) or (
+            self.player_num == -1 and self.second_algorithm is not None
         ):
-            move = self.cpu_algorism(self.board, self.player_num)
+            if self.player_num == 1:
+                move = self.first_algorithm(self.board, self.player_num)
+            else:
+                move = self.second_algorithm(self.board, self.player_num)
+
             if move != []:
                 x, y = move
                 self.board = self.put_disc(self.board, self.player_num, x, y)
@@ -243,8 +250,8 @@ class ReversiGUI:
 
     def on_click(self, event):
         # CPUの手番中はクリックを無視する
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and not self.cpu_first
+        if (self.player_num == 1 and self.first_algorithm is not None) or (
+            self.player_num == -1 and self.second_algorithm is not None
         ):
             return
 
@@ -336,8 +343,8 @@ class ReversiGUI:
         return discs_list
 
     def check_cpu_move(self):
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and not self.cpu_first
+        if (self.player_num == 1 and self.first_algorithm is not None) or (
+            self.player_num == -1 and self.second_algorithm is not None
         ):
             self.gui.after(100, self.cpu_turn)
 
