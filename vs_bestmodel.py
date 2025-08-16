@@ -1,5 +1,4 @@
 from src.ReversiGUI import ReversiGUI
-from src.VsBestModel import VsBestModel
 from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
 
 """
@@ -42,5 +41,5 @@ def cpu_algorism(board, player_num):
 
 
 if __name__ == "__main__":
-    app = VsBestModel(cpu_algorism=cpu_algorism, cpu_first=True, best_model=cpu_move)
+    app = ReversiGUI(first_algorithm=cpu_algorism, second_algorithm=cpu_move)
     app.gui.mainloop()
