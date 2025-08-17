@@ -15,12 +15,12 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 uv venv --python 3.11
 source .venv/bin/activate
 ```
-- Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
 ## 2. Reversiアプリの起動
 ```sh
 python main.py
 ```
+- 何も表示されない場合：Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
 ## 3. アルゴリズムの実装
 `main.py`を開き，`cpu_algorism`関数を編集してください．
