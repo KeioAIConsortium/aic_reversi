@@ -10,6 +10,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+### プログラムのダウンロード
+```
+git clone https://github.com/KeioAIConsortium/aic_reversi.git
+cd aic_reversi
+```
+
 ### 実行環境の起動
 ```sh
 uv venv --python 3.11
