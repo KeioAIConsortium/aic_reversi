@@ -20,26 +20,32 @@ class Online(ReversiGUI):
         self.on_init = on_init
         self.online_first = online_first
 
-        if online_first:
+        if not online_first:
             self.on_init()
 
     def online_turn(self):
         if (self.player_num == 1 and self.online_first) or (
             self.player_num == -1 and not self.online_first
         ):
-            result, board, player_num = self.polling(player_num=self.player_num)
+            result, board, player_num = self.polling()
             if not result:
                 self.gui.after(1000, self.online_turn)
 
             self.board = board
             self.update_board()
+
             if self.check_game_end():
                 return
+
+            if self.player_num == player_num:
+                self.gui.after(100, self.online_turn)
+                return
+
+            self.player_num = player_num
+            self.update_board()
             self.gui.after(100, self.check_cpu_move)
 
-        if player_num == self.player_num or self.validate_reversible_all(
-            self.board, self.player_num
-        ):
+        if not self.validate_reversible_all(self.board, self.player_num):
             self.show_message(
                 "パス",
                 f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
@@ -77,7 +83,7 @@ class Online(ReversiGUI):
                 return
 
             x, y = move
-            success, netboard, _ = self.on_put(self.board, self.player_num, x, y)
+            success, netboard, _ = self.on_put(self.player_num, x, y)
             newboard = self.put_disc(self.board, self.player_num, x, y)
             if not success and netboard != newboard:
                 self.show_message("エラー", "ネットワークエラー")
@@ -112,7 +118,7 @@ class Online(ReversiGUI):
         y = event.y // 50 + 1
 
         if self.validate_reversible(self.board, self.player_num, x, y):
-            success, _ = self.on_put(self.board, self.player_num, x, y)
+            success, _, _ = self.on_put(self.player_num, y, x)
             if not success:
                 self.show_message("エラー", "ネットワークエラー")
                 return
