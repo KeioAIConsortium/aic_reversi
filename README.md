@@ -19,12 +19,11 @@ cd aic_reversi
 ### 実行環境の起動
 ```sh
 uv venv --python 3.11
-source .venv/bin/activate
 ```
 
 ## 2. Reversiアプリの起動
 ```sh
-python main.py
+uv run python main.py
 ```
 - 何も表示されない場合：Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
@@ -53,7 +52,7 @@ from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使
 ```
 ### 実行
 ```sh
-python vs_bestmodel.py
+uv run python vs_bestmodel.py
 ```
 
 ## 🏆 過去の大会
