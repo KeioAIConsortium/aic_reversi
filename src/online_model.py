@@ -30,12 +30,11 @@ def polling():
         data = res.json()
         print(data)
         return [True, data["board"], data["player"]]
-
     else:
         print("Network error")
         return [False, None, None]
-
-
+    # Ensure a return value in all cases
+    return [False, None, None]
 def on_init():
     res = requests.post(URL, json={"action": "init"})
     if res.status_code == 200:
