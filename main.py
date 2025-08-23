@@ -1,5 +1,4 @@
 from src.ReversiGUI import ReversiGUI
-
 """
 CPUの手を選択する関数
 
@@ -26,13 +25,12 @@ def cpu_algorism(board, player_num):
 """
 
 
-def cpu_algorism(board, player_num):
+def cpu_algorithm(board, player_num):
     valid_moves = []  # 置けるマスかを格納するリスト
     for x in range(1, 9):  # 1行ずつ走査
         for y in range(1, 9):  # 1列ずつ走査
-            if ReversiGUI.validate_reversible(
-                board, player_num, x, y
-            ):  # その(x,y)座標に石を置けるか判定
+            if ReversiGUI.validate_reversible(board, player_num, x,
+                                              y):  # その(x,y)座標に石を置けるか判定
                 valid_moves.append([x, y])  # 置けるマスとしてリストに追加
     if valid_moves != []:  # 置けるマスがある場合
         return valid_moves[0]
@@ -40,5 +38,5 @@ def cpu_algorism(board, player_num):
 
 
 if __name__ == "__main__":
-    app = ReversiGUI(first_algorithm=None, second_algorithm=cpu_algorism)
+    app = ReversiGUI(first_algorithm=None, second_algorithm=cpu_algorithm)
     app.gui.mainloop()

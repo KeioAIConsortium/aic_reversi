@@ -7,9 +7,13 @@ URL = "https://script.google.com/macros/s/AKfycbzCrYJLbnkiMHzNscXcbikvbBX7fOsaF-
 
 def on_put(player_num, row, col):
     print(player_num, row, col)
-    res = requests.post(
-        URL, json={"action": "put", "player": player_num, "row": row, "col": col}
-    )
+    res = requests.post(URL,
+                        json={
+                            "action": "put",
+                            "player": player_num,
+                            "row": row,
+                            "col": col
+                        })
     if res.status_code == 200:
         print(res.text)
         data = res.json()
@@ -47,12 +51,12 @@ def on_init():
         return False, None, None
 
 
-if __name__ == "__main__":
+def online_model(is_first, local_algorithm=None):
     online = Online(
         on_put=on_put,
         polling=polling,
         on_init=on_init,
-        online_first=False,
-        local_algorithm=cpu_move,
+        online_first=not is_first,
+        local_algorithm=local_algorithm,
     )
     online.gui.mainloop()
