@@ -4,7 +4,6 @@ import copy
 import os
 
 os.environ["TK_SILENCE_DEPRECATION"] = "1"
-
 """
 盤面を初期化して返す関数
 
@@ -356,16 +355,8 @@ def cpu_move_safe(board, player_num):
                     edges.append((x, y))
                 if x > 2 and x < 7 and y > 2 and y < 7:
                     central.append((x, y))
-                if not (
-                    x < 3
-                    and y < 3
-                    or x < 3
-                    and y > 6
-                    or x > 6
-                    and y < 3
-                    or x > 6
-                    and y > 6
-                ):
+                if not (x < 3 and y < 3 or x < 3 and y > 6 or x > 6 and y < 3
+                        or x > 6 and y > 6):
                     safe.append((x, y))
     if corners != []:
         return corners[0]
@@ -399,31 +390,12 @@ def cpu_move_pred(board, player_num):
                     edges.append((x, y))
                 if x > 2 and x < 7 and y > 2 and y < 7:
                     central.append((x, y))
-                if not (
-                    x < 3
-                    and y < 3
-                    or x < 3
-                    and y > 6
-                    or x > 6
-                    and y < 3
-                    or x > 6
-                    and y > 6
-                ):
+                if not (x < 3 and y < 3 or x < 3 and y > 6 or x > 6 and y < 3
+                        or x > 6 and y > 6):
                     safe.append((x, y))
-                if (
-                    x == 2
-                    and y > 2
-                    and y > 7
-                    or x == 7
-                    and y > 2
-                    and y < 7
-                    or y == 2
-                    and x > 2
-                    and x > 7
-                    or y == 7
-                    and x > 2
-                    and x < 7
-                ):
+                if (x == 2 and y > 2 and y > 7 or x == 7 and y > 2 and y < 7
+                        or y == 2 and x > 2 and x > 7
+                        or y == 7 and x > 2 and x < 7):
                     side.append((x, y))
 
     # 全部のvalid_movesにおいて，次の手で取れる石の数を数える
@@ -475,16 +447,8 @@ def cpu_move_safe(board, player_num):
                     edges.append((x, y))
                 if x > 2 and x < 7 and y > 2 and y < 7:
                     central.append((x, y))
-                if not (
-                    x < 3
-                    and y < 3
-                    or x < 3
-                    and y > 6
-                    or x > 6
-                    and y < 3
-                    or x > 6
-                    and y > 6
-                ):
+                if not (x < 3 and y < 3 or x < 3 and y > 6 or x > 6 and y < 3
+                        or x > 6 and y > 6):
                     safe.append((x, y))
 
     if corners != []:
@@ -513,34 +477,18 @@ def cpu_move_pred_2(board, player_num):
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
-                valid_moves.append((x, y))
-                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
-                    corners.append((x, y))
+                valid_moves.append([x, y])
+                if [x, y] in [[1, 1], [1, 8], [8, 1], [8, 8]]:
+                    corners.append([x, y])
                 if x == 1 or y == 1 or x == 8 or y == 8:
-                    edges.append((x, y))
+                    edges.append([x, y])
                 if x > 2 and x < 7 and y > 2 and y < 7:
-                    central.append((x, y))
-                if not (
-                    x < 3
-                    and y < 3
-                    or x < 3
-                    and y > 6
-                    or x > 6
-                    and y < 3
-                    or x > 6
-                    and y > 6
-                ):
-                    safe.append((x, y))
-                if (
-                    x < 3
-                    and y < 3
-                    or x < 3
-                    and y > 6
-                    or x > 6
-                    and y < 3
-                    or x > 6
-                    and y > 6
-                ):
+                    central.append([x, y])
+                if not (x < 3 and y < 3 or x < 3 and y > 6 or x > 6 and y < 3
+                        or x > 6 and y > 6):
+                    safe.append([x, y])
+                if (x < 3 and y < 3 or x < 3 and y > 6 or x > 6 and y < 3
+                        or x > 6 and y > 6):
                     # その四角が自分のコマなら，safe_cornerに追加
                     target_x, target_y = 0, 0
                     if x < 3:
@@ -552,22 +500,11 @@ def cpu_move_pred_2(board, player_num):
                     if y > 6:
                         target_y = 8
                     if board[target_y][target_x] == player_num:
-                        safe_corner.append((x, y))
-                if (
-                    x == 2
-                    and y > 2
-                    and y < 7
-                    or x == 7
-                    and y > 2
-                    and y < 7
-                    or y == 2
-                    and x > 2
-                    and x < 7
-                    or y == 7
-                    and x > 2
-                    and x < 7
-                ):
-                    side.append((x, y))
+                        safe_corner.append([x, y])
+                if (x == 2 and y > 2 and y < 7 or x == 7 and y > 2 and y < 7
+                        or y == 2 and x > 2 and x < 7
+                        or y == 7 and x > 2 and x < 7):
+                    side.append([x, y])
 
     # 全部のvalid_movesにおいて，次の手で取れる石の数を数える
     # その数が最大の手を選ぶ
@@ -588,6 +525,8 @@ def cpu_move_pred_2(board, player_num):
     else:
         # min_moveを選択
         # もし，min_moveが複数ある場合は，次の条件で選択
+        if next_moves == []:
+            return []
         min_move = min(next_moves)
         min_move_num = next_moves.count(min_move)
         if min_move_num == 1:
@@ -613,6 +552,7 @@ def check_next_move_num(board, next_player_num):
 
 # GUI関数（完成済）
 class ReversiGUI:
+
     def __init__(self, master):
         self.master = master
         self.master.title("リバーシ")
@@ -646,16 +586,14 @@ class ReversiGUI:
             self.master.after(100, self.check_cpu_move)
 
     def check_cpu_move(self):
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and self.cpu_second
-        ):
+        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1
+                                                         and self.cpu_second):
             self.master.after(100, self.cpu_turn)
 
     def cpu_turn(self):
         # CPUの手番である場合の処理
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and self.cpu_second
-        ):
+        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1
+                                                         and self.cpu_second):
             # TODO この関数を変更
             move = cpu_move_pred_2(self.board, self.player_num)
             if move != []:
@@ -698,17 +636,20 @@ class ReversiGUI:
                 self.canvas.create_rectangle(x0, y0, x1, y1, outline="black")
                 cell = self.board[y + 1][x + 1]
                 if cell == 1:
-                    self.canvas.create_oval(
-                        x0 + 5, y0 + 5, x1 - 5, y1 - 5, fill="black"
-                    )
+                    self.canvas.create_oval(x0 + 5,
+                                            y0 + 5,
+                                            x1 - 5,
+                                            y1 - 5,
+                                            fill="black")
                 elif cell == -1:
-                    self.canvas.create_oval(
-                        x0 + 5, y0 + 5, x1 - 5, y1 - 5, fill="white"
-                    )
+                    self.canvas.create_oval(x0 + 5,
+                                            y0 + 5,
+                                            x1 - 5,
+                                            y1 - 5,
+                                            fill="white")
 
         self.info_label["text"] = (
-            f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'}"
-        )
+            f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'}")
 
     def show_result(self):
         black, white = count_discs(self.board)
@@ -718,15 +659,13 @@ class ReversiGUI:
             winner = "○の勝ち"
         else:
             winner = "引き分け"
-        messagebox.showinfo(
-            "ゲーム終了", f"ゲーム終了！\n黒: {black}, 白: {white}\n{winner}"
-        )
+        messagebox.showinfo("ゲーム終了",
+                            f"ゲーム終了！\n黒: {black}, 白: {white}\n{winner}")
         self.master.destroy()
 
     def check_game_end(self):
-        if not validate_reversible_all(self.board, 1) and not validate_reversible_all(
-            self.board, -1
-        ):
+        if not validate_reversible_all(
+                self.board, 1) and not validate_reversible_all(self.board, -1):
             self.update_board()
             self.master.after(100, self.show_result)
             return True
@@ -734,9 +673,8 @@ class ReversiGUI:
 
     def on_click(self, event):
         # CPUの手番中はクリックを無視する
-        if (self.player_num == 1 and self.cpu_first) or (
-            self.player_num == -1 and self.cpu_second
-        ):
+        if (self.player_num == 1 and self.cpu_first) or (self.player_num == -1
+                                                         and self.cpu_second):
             return
 
         x = event.x // 50 + 1
