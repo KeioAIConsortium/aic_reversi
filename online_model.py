@@ -1,5 +1,6 @@
 from src.Online import Online
 import requests
+from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
 
 URL = "https://script.google.com/macros/s/AKfycbzCrYJLbnkiMHzNscXcbikvbBX7fOsaF-AlDUk180WS7b75hqHA55lQgFAy8Hn9cAdO/exec"
 
@@ -52,6 +53,6 @@ if __name__ == "__main__":
         polling=polling,
         on_init=on_init,
         online_first=True,
-        local_algorithm=None,
+        local_algorithm=cpu_move,
     )
     online.gui.mainloop()

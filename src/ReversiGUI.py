@@ -194,6 +194,8 @@ class ReversiGUI:
 
     def cpu_turn(self):
         # CPUの手番である場合の処理
+        if self.check_game_end():
+            return
         if (self.player_num == 1 and self.first_algorithm is not None) or (
             self.player_num == -1 and self.second_algorithm is not None
         ):
@@ -202,29 +204,44 @@ class ReversiGUI:
             else:
                 move = self.second_algorithm(self.board, self.player_num)
 
-            if move != []:
+            if type(move) is list and move != []:
                 x, y = move
                 self.board = self.put_disc(self.board, self.player_num, x, y)
+                self.pass_count = 0
             else:
+                self.show_message(
+                    "パス",
+                    f"{'●' if self.player_num == 1 else '○'}は正しく手を返しませんでした。パスします。",
+                )
+                self.pass_count += 1
+                if self.pass_count == 2:
+                    self.update_board()
+                    self.gui.after(100, self.show_result)
+                    return
+
+            self.player_num = self.rival_player_num(self.player_num)
+            self.update_board()
+            if self.check_game_end():
+                self.update_board()
+                self.gui.after(100, self.show_result)
+                return
+
+            # もしユーザが置ける場所がない場合は再帰する
+            if not self.validate_reversible_all(self.board, self.player_num):
                 self.show_message(
                     "パス",
                     f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
                 )
-            self.player_num = self.rival_player_num(self.player_num)
-            self.pass_count = 0
-            self.update_board()
-            if self.check_game_end():
-                return
-            self.gui.after(100, self.check_cpu_move)
+                self.pass_count += 1
+                if self.pass_count == 2:
+                    self.update_board()
+                    self.gui.after(100, self.show_result)
+                    return
 
-        # もしユーザが置ける場所がない場合は再帰する
-        if not self.validate_reversible_all(self.board, self.player_num):
-            self.show_message(
-                "パス",
-                f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
-            )
-            self.player_num = self.rival_player_num(self.player_num)
-            self.cpu_turn()
+                self.player_num = self.rival_player_num(self.player_num)
+                # self.cpu_turn()
+
+            self.gui.after(100, self.check_cpu_move)
 
     def show_result(self):
         black, white = self.count_discs()
@@ -243,8 +260,6 @@ class ReversiGUI:
         if not self.validate_reversible_all(
             self.board, 1
         ) and not self.validate_reversible_all(self.board, -1):
-            self.update_board()
-            self.gui.after(100, self.show_result)
             return True
         return False
 
@@ -267,6 +282,8 @@ class ReversiGUI:
             return
 
         if self.check_game_end():
+            self.update_board()
+            self.gui.after(100, self.show_result)
             return
 
         if not self.validate_reversible_all(self.board, self.player_num):
@@ -343,6 +360,8 @@ class ReversiGUI:
         return discs_list
 
     def check_cpu_move(self):
+        if self.check_game_end():
+            return
         if (self.player_num == 1 and self.first_algorithm is not None) or (
             self.player_num == -1 and self.second_algorithm is not None
         ):

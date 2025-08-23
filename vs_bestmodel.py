@@ -34,12 +34,12 @@ def cpu_algorism(board, player_num):
             if ReversiGUI.validate_reversible(
                 board, player_num, x, y
             ):  # その(x,y)座標に石を置けるか判定
-                valid_moves.append((x, y))  # 置けるマスとしてリストに追加
+                valid_moves.append([x, y])  # 置けるマスとしてリストに追加
     if valid_moves != []:  # 置けるマスがある場合
         return valid_moves[0]
     return valid_moves
 
 
 if __name__ == "__main__":
-    app = ReversiGUI(first_algorithm=cpu_algorism, second_algorithm=cpu_move)
+    app = ReversiGUI(first_algorithm=cpu_move, second_algorithm=cpu_move)
     app.gui.mainloop()

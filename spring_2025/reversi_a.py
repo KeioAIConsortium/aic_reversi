@@ -513,13 +513,13 @@ def cpu_move_pred_2(board, player_num):
     for x in range(1, 9):
         for y in range(1, 9):
             if validate_reversible(board, player_num, x, y):
-                valid_moves.append((x, y))
-                if (x, y) in [(1, 1), (1, 8), (8, 1), (8, 8)]:
-                    corners.append((x, y))
+                valid_moves.append([x, y])
+                if [x, y] in [[1, 1], [1, 8], [8, 1], [8, 8]]:
+                    corners.append([x, y])
                 if x == 1 or y == 1 or x == 8 or y == 8:
-                    edges.append((x, y))
+                    edges.append([x, y])
                 if x > 2 and x < 7 and y > 2 and y < 7:
-                    central.append((x, y))
+                    central.append([x, y])
                 if not (
                     x < 3
                     and y < 3
@@ -530,7 +530,7 @@ def cpu_move_pred_2(board, player_num):
                     or x > 6
                     and y > 6
                 ):
-                    safe.append((x, y))
+                    safe.append([x, y])
                 if (
                     x < 3
                     and y < 3
@@ -552,7 +552,7 @@ def cpu_move_pred_2(board, player_num):
                     if y > 6:
                         target_y = 8
                     if board[target_y][target_x] == player_num:
-                        safe_corner.append((x, y))
+                        safe_corner.append([x, y])
                 if (
                     x == 2
                     and y > 2
@@ -567,7 +567,7 @@ def cpu_move_pred_2(board, player_num):
                     and x > 2
                     and x < 7
                 ):
-                    side.append((x, y))
+                    side.append([x, y])
 
     # 全部のvalid_movesにおいて，次の手で取れる石の数を数える
     # その数が最大の手を選ぶ
@@ -588,7 +588,7 @@ def cpu_move_pred_2(board, player_num):
     else:
         # min_moveを選択
         # もし，min_moveが複数ある場合は，次の条件で選択
-        min_move = min(next_moves)
+        min_move = min(next_moves) if next_moves != [] else []
         min_move_num = next_moves.count(min_move)
         if min_move_num == 1:
             return valid_moves[next_moves.index(min_move)]

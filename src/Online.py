@@ -30,6 +30,16 @@ class Online(ReversiGUI):
             result, board, player_num = self.polling()
             if not result:
                 self.gui.after(1000, self.online_turn)
+                return
+
+            diff = False
+            for o, n in zip(self.board, board):
+                if o != n:
+                    diff = True
+                    break
+            if not diff:
+                self.gui.after(1000, self.online_turn)
+                return
 
             self.board = board
             self.update_board()
@@ -38,11 +48,22 @@ class Online(ReversiGUI):
                 return
 
             if self.player_num == player_num:
+                self.show_message(
+                    "パス",
+                    f"{'○' if self.player_num == 1 else '●'}は置ける場所がありません。パスします。",
+                )
+                self.pass_count += 1
+                if self.pass_count == 2:
+                    self.update_board()
+                    self.gui.after(100, self.show_result)
+                    return
                 self.gui.after(100, self.online_turn)
                 return
 
             self.player_num = player_num
             self.update_board()
+            self.gui.after(100, self.check_cpu_move)
+        else:
             self.gui.after(100, self.check_cpu_move)
 
         if not self.validate_reversible_all(self.board, self.player_num):
@@ -50,6 +71,11 @@ class Online(ReversiGUI):
                 "パス",
                 f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
             )
+            self.pass_count += 1
+            if self.pass_count == 2:
+                self.update_board()
+                self.gui.after(100, self.show_result)
+                return
             self.player_num = self.rival_player_num(self.player_num)
             self.online_turn()
 
@@ -67,6 +93,8 @@ class Online(ReversiGUI):
     # override
     def cpu_turn(self):
         # CPUの手番である場合の処理
+        if self.check_game_end():
+            return
         if (self.player_num == 1 and self.first_algorithm is not None) or (
             self.player_num == -1 and self.second_algorithm is not None
         ):
@@ -75,15 +103,15 @@ class Online(ReversiGUI):
             else:
                 move = self.second_algorithm(self.board, self.player_num)
 
-            if move == []:
+            if type(move) is not list or move == []:
                 self.show_message(
                     "エラー",
-                    "置ける場所がない状況でアルゴリズムが呼ばれました",
+                    "置ける場所がない状況でアルゴリズムが呼ばれたか，アルゴリズムが手を返しませんでした。",
                 )
                 return
 
             x, y = move
-            success, netboard, _ = self.on_put(self.player_num, x, y)
+            success, netboard, _ = self.on_put(self.player_num, y, x)
             newboard = self.put_disc(self.board, self.player_num, x, y)
             if not success and netboard != newboard:
                 self.show_message("エラー", "ネットワークエラー")
@@ -95,16 +123,22 @@ class Online(ReversiGUI):
             self.update_board()
             if self.check_game_end():
                 return
-            self.gui.after(100, self.check_cpu_move)
 
-        # もし相手が置ける場所がない場合は再帰する
-        if not self.validate_reversible_all(self.board, self.player_num):
-            self.show_message(
-                "パス",
-                f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
-            )
-            self.player_num = self.rival_player_num(self.player_num)
-            self.cpu_turn()
+            # もし相手が置ける場所がない場合は再帰する
+            if not self.validate_reversible_all(self.board, self.player_num):
+                self.show_message(
+                    "パス",
+                    f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
+                )
+                self.pass_count += 1
+                if self.pass_count == 2:
+                    self.update_board()
+                    self.gui.after(100, self.show_result)
+                    return
+                self.player_num = self.rival_player_num(self.player_num)
+                # self.cpu_turn()
+
+            self.gui.after(100, self.check_cpu_move)
 
     # override
     def on_click(self, event):
