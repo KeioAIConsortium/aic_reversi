@@ -10,6 +10,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+### プログラムのダウンロード
+```
+git clone https://github.com/KeioAIConsortium/aic_reversi.git
+cd aic_reversi
+```
+
 ### 実行環境の起動
 ```sh
 # macOS/Linux
@@ -19,13 +25,14 @@ source .venv/bin/activate
 # Windows
 uv venv --python 3.11
 .venv\Scripts\activate
+
 ```
-- Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
 ## 2. Reversiアプリの起動
 ```sh
-python main.py
+uv run python main.py
 ```
+- 何も表示されない場合：Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
 ## 3. アルゴリズムの実装
 `main.py`を開き，`cpu_algorithm`関数を編集してください．
@@ -52,7 +59,7 @@ from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使
 ```
 ### 実行
 ```sh
-python vs_bestmodel.py
+uv run python vs_bestmodel.py
 ```
 
 ## 5. オンライン対戦
