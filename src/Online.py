@@ -45,6 +45,8 @@ class Online(ReversiGUI):
             self.update_board()
 
             if self.check_game_end():
+                self.update_board()
+                self.gui.after(100, self.show_result)
                 return
 
             if self.player_num == player_num:
@@ -122,6 +124,8 @@ class Online(ReversiGUI):
             self.pass_count = 0
             self.update_board()
             if self.check_game_end():
+                self.update_board()
+                self.gui.after(100, self.show_result)
                 return
 
             # もし相手が置ける場所がない場合は再帰する
@@ -164,6 +168,8 @@ class Online(ReversiGUI):
             return
 
         if self.check_game_end():
+            self.update_board()
+            self.gui.after(100, self.show_result)
             return
 
         if not self.validate_reversible_all(self.board, self.player_num):

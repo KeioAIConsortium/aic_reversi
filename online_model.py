@@ -52,7 +52,7 @@ if __name__ == "__main__":
         on_put=on_put,
         polling=polling,
         on_init=on_init,
-        online_first=True,
+        online_first=False,
         local_algorithm=cpu_move,
     )
     online.gui.mainloop()
