@@ -34,11 +34,71 @@ def cpu_algorism(board, player_num):
                 board, player_num, x, y
             ):  # その(x,y)座標に石を置けるか判定
                 valid_moves.append((x, y))  # 置けるマスとしてリストに追加
-    if valid_moves != []:  # 置けるマスがある場合
-        return valid_moves[0]
-    return valid_moves
 
+    kado_list = [(1,1),(1,8),(8,1),(8,8)]        
+    hen_list = [(1,3),(1,4),(1,5),(1,6),(3,1),(4,1),(5,1),(6,1),(3,8),(4,8),(5,8),(6,8),
+                (8,3),(8,4),(8,5),(8,6)]
+    
+    count_1=0
+    for y in range (3,6,1):
+        if board [y][1]==-1:
+            count_1 +=1
+        if count_1 == 4:
+            hen_list.append ([2,1])
+            hen_list.append ([7,1])
+    count_2=0
+    for x in range (3,6,1):
+        if board [1][x]==-1:
+            count_2 +=1
+        if count_2 == 4:
+            hen_list.append ([1,2])
+            hen_list.append ([1,7])
+    count_3=0
+    for y in range (3,6,1):
+        if board [y][7]==-1:
+            count_3 +=1
+        if count_3 == 4:
+            hen_list.append ([8,2])
+            hen_list.append ([8,7])
+    count_4=0
+    for x in range (3,6,1):
+        if board [7][x]==-1:
+            count_4 +=1
+        if count_4 == 4:
+            hen_list.append ([2,8])
+            hen_list.append ([7,8])
+
+    utikado_list = [(3,3),(3,6),(6,3),(6,6)]
+    utihen_list = [(4,3),(5,3),(6,4),(6,5),(3,4),(3,5),(4,6),(5,6)]
+    utisyuu_list = [(3,2),(4,2),(5,2),(6,2),(7,3),(7,4),(7,5),(7,6),(2,3),(2,4),(2,5),(2,6),(3,7),(4,7),(5,7),(6,7)]
+    henkado_list = [(2,1),(7,1),(1,2),(8,2),(1,7),(8,7),(2,8),(7,8)]
+
+    for valid_move in valid_moves:
+        for kado in kado_list:
+            if valid_move == kado: 
+                return valid_move
+        for hen in hen_list:
+            if valid_move == hen: 
+                return valid_move
+        for utikado in utikado_list:
+            if valid_move == utikado: 
+                return valid_move   
+        for utihen in utihen_list:
+            if valid_move == utihen: 
+                return valid_move
+        for utisyuu in utisyuu_list:
+            if valid_move == utisyuu: 
+                return valid_move
+        for henkado in henkado_list:
+            if valid_move == henkado: 
+                return valid_move
+    if valid_moves != []:     
+            return valid_moves[0]
+    return valid_moves
+ 
 
 if __name__ == "__main__":
     app = ReversiGUI(first_algorithm=None, second_algorithm=cpu_algorism)
     app.gui.mainloop()
+
+
