@@ -16,18 +16,6 @@ git clone https://github.com/KeioAIConsortium/aic_reversi.git
 cd aic_reversi
 ```
 
-### 実行環境の起動
-```sh
-# macOS/Linux
-uv venv --python 3.11
-source .venv/bin/activate
-
-# Windows
-uv venv --python 3.11
-.venv\Scripts\activate
-
-```
-
 ## 2. Reversiアプリの起動
 ```sh
 uv run python main.py
@@ -35,7 +23,7 @@ uv run python main.py
 - 何も表示されない場合：Pythonのversionがtkinterに対応していることを確認してください．対応していない場合は画面が表示されません．
 
 ## 3. アルゴリズムの実装
-`main.py`を開き，`cpu_algorithm`関数を編集してください．
+`vs_human.py`を開き，`cpu_algorithm`関数を編集してください．
 ```python
 def cpu_algorithm(board, player_num):
     valid_moves = []  # 置けるマスかを格納するリスト
@@ -62,7 +50,24 @@ from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使
 uv run python vs_bestmodel.py
 ```
 
-## 5. オンライン対戦
+## 5. 様々な強さのモデルとの対戦
+`vs_models.py`を使用して様々な強さのモデルと対戦できます．
+`cpu_algorithm`関数に自分のアルゴリズムを実装してください．
+対戦相手のモデルは，以下の部分を変えることで変更できます．
+```python
+# opponent = cpu_lv0.cpu_lv0  # ランダム
+opponent = cpu_lv1.cpu_lv1  # 最も多くの石をひっくり返せる手を選ぶ
+# opponent = cpu_lv2.cpu_lv2  # コーナー優先戦略
+# opponent = cpu_lv3.cpu_lv3  # 位置の重み付けに基づいて手を選ぶ
+# opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
+# opponent = cpu_lv5.cpu_lv5  # αβ法で最善手を選ぶモデル
+```
+### 実行
+```sh
+uv run python vs_models.py
+```
+
+## 6. オンライン対戦
 `online_battle.py`を使用してオンラインで対戦できます．
 `cpu_algorithm`関数に自分のアルゴリズムを実装してください．
 `is_first`を`True`にすると先手，`False`にすると後手になります．
