@@ -43,7 +43,7 @@ def cpu_algorithm(board, player_num):
 `cpu_algorithm`関数に自分のアルゴリズムを実装してください．
 対戦相手のモデルは，以下（3行目）を変えることで変更できます．
 ```python
-from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
 ```
 ### 実行
 ```sh

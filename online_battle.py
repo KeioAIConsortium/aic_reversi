@@ -1,5 +1,6 @@
 from src.ReversiGUI import ReversiGUI
 from src.online_model import online_model
+
 """
 CPUの手を選択する関数
 
@@ -20,7 +21,7 @@ CPUの手を選択する関数
 過去の優勝モデルと戦う場合：以下を使用
 
 def cpu_algorithm(board, player_num):
-    from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+    from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
 
     return cpu_move(board, player_num)  # 過去の優勝モデルを使用
 """
@@ -30,8 +31,9 @@ def cpu_algorithm(board, player_num):
     valid_moves = []  # 置けるマスかを格納するリスト
     for x in range(1, 9):  # 1行ずつ走査
         for y in range(1, 9):  # 1列ずつ走査
-            if ReversiGUI.validate_reversible(board, player_num, x,
-                                              y):  # その(x,y)座標に石を置けるか判定
+            if ReversiGUI.validate_reversible(
+                board, player_num, x, y
+            ):  # その(x,y)座標に石を置けるか判定
                 valid_moves.append([x, y])  # 置けるマスとしてリストに追加
     if valid_moves != []:  # 置けるマスがある場合
         return valid_moves[0]

@@ -1,4 +1,4 @@
-from spring_2025.reversi_a import cpu_move_pred_2
+from models.spring_2025.reversi_a import cpu_move_pred_2
 
 
 # 以前の授業での最強モデル

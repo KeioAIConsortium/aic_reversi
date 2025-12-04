@@ -1,5 +1,5 @@
 from src.ReversiGUI import ReversiGUI
-from cpu.util import find_valid_moves
+from models.cpu.util import find_valid_moves
 import random
 
 

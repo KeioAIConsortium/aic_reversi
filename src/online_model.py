@@ -1,19 +1,15 @@
 from src.Online import Online
 import requests
-from spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
 
 URL = "https://script.google.com/macros/s/AKfycbzCrYJLbnkiMHzNscXcbikvbBX7fOsaF-AlDUk180WS7b75hqHA55lQgFAy8Hn9cAdO/exec"
 
 
 def on_put(player_num, row, col):
     print(player_num, row, col)
-    res = requests.post(URL,
-                        json={
-                            "action": "put",
-                            "player": player_num,
-                            "row": row,
-                            "col": col
-                        })
+    res = requests.post(
+        URL, json={"action": "put", "player": player_num, "row": row, "col": col}
+    )
     if res.status_code == 200:
         print(res.text)
         data = res.json()
@@ -35,6 +31,8 @@ def polling():
         return [False, None, None]
     # Ensure a return value in all cases
     return [False, None, None]
+
+
 def on_init():
     res = requests.post(URL, json={"action": "init"})
     if res.status_code == 200:

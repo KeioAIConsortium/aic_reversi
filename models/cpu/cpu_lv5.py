@@ -1,5 +1,5 @@
 from src.ReversiGUI import ReversiGUI
-from cpu.util import find_valid_moves
+from models.cpu.util import find_valid_moves
 import copy
 
 # αβ探索を使ったオセロの思考エンジン
@@ -45,7 +45,7 @@ def evaluate(bd, my_player):
     # 角のボーナス（重めに扱う）
     corners = [(1, 1), (1, 8), (8, 1), (8, 8)]
     corner_score = 0
-    for (cx, cy) in corners:
+    for cx, cy in corners:
         if bd[cy][cx] == my_player:
             corner_score += 25
         elif bd[cy][cx] == -my_player:
@@ -57,8 +57,7 @@ def evaluate(bd, my_player):
     mobility = my_moves - opp_moves
 
     # 重み付けして合成
-    score = (10 * disc_diff) + (800 * corner_score) + (5 *
-                                                       mobility) + pos_score
+    score = (10 * disc_diff) + (800 * corner_score) + (5 * mobility) + pos_score
     return score
 
 
@@ -74,18 +73,16 @@ def alphabeta(bd, depth, alpha, beta, current_player, player_num):
 
     if current_player == player_num:
         # maximizing
-        value = -10**9
+        value = -(10**9)
         if not moves:
             # パス: 相手の手番へ移行
-            return alphabeta(bd, depth - 1, alpha, beta, -current_player,
-                             player_num)
-        for (x, y) in moves:
+            return alphabeta(bd, depth - 1, alpha, beta, -current_player, player_num)
+        for x, y in moves:
             # 盤面コピーして手を打つ
             new_bd = copy.deepcopy(bd)
             # ReversiGUI.put_disc はボードを直接変更するためコピーを渡す
             ReversiGUI.put_disc(new_bd, current_player, x, y)
-            val = alphabeta(new_bd, depth - 1, alpha, beta, -current_player,
-                            player_num)
+            val = alphabeta(new_bd, depth - 1, alpha, beta, -current_player, player_num)
             if val > value:
                 value = val
             if value > alpha:
@@ -97,13 +94,11 @@ def alphabeta(bd, depth, alpha, beta, current_player, player_num):
         # minimizing
         value = 10**9
         if not moves:
-            return alphabeta(bd, depth - 1, alpha, beta, -current_player,
-                             player_num)
-        for (x, y) in moves:
+            return alphabeta(bd, depth - 1, alpha, beta, -current_player, player_num)
+        for x, y in moves:
             new_bd = copy.deepcopy(bd)
             ReversiGUI.put_disc(new_bd, current_player, x, y)
-            val = alphabeta(new_bd, depth - 1, alpha, beta, -current_player,
-                            player_num)
+            val = alphabeta(new_bd, depth - 1, alpha, beta, -current_player, player_num)
             if val < value:
                 value = val
             if value < beta:
@@ -116,12 +111,12 @@ def alphabeta(bd, depth, alpha, beta, current_player, player_num):
 # αβ法で最善手を選ぶモデル
 def cpu_lv5(board, player_num, max_depth: int = 4):
     """
-	αβ法で最善手を返す
+    αβ法で最善手を返す
 
-	- board: 10x10 の盤面リスト（ReversiGUI と互換）
-	- player_num: 探索対象となるプレイヤー（1 または -1）
-	- max_depth: 探索深さの上限（デフォルト4）
-	"""
+    - board: 10x10 の盤面リスト（ReversiGUI と互換）
+    - player_num: 探索対象となるプレイヤー（1 または -1）
+    - max_depth: 探索深さの上限（デフォルト4）
+    """
 
     # 置ける手を取得（util.find_valid_moves を活用）
     valid_moves = find_valid_moves(board, player_num)
@@ -129,16 +124,15 @@ def cpu_lv5(board, player_num, max_depth: int = 4):
         return []
 
     # ルートでの最善手探索
-    best_score = -10**9
+    best_score = -(10**9)
     best_move = valid_moves[0]
-    alpha = -10**9
+    alpha = -(10**9)
     beta = 10**9
-    for (x, y) in valid_moves:
+    for x, y in valid_moves:
         # それぞれの手を試してスコアを評価（元の board は変更しない）
         new_bd = copy.deepcopy(board)
         ReversiGUI.put_disc(new_bd, player_num, x, y)
-        score = alphabeta(new_bd, max_depth - 1, alpha, beta, -player_num,
-                          player_num)
+        score = alphabeta(new_bd, max_depth - 1, alpha, beta, -player_num, player_num)
         # 詳細ログを残したい場合はここで print しても良い
         if score > best_score:
             best_score = score
