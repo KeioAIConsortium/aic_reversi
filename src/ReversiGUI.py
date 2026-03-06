@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from typing import Callable
+import copy
 
 Algorithm_type = Callable[[list[list[int]], int], list[int, int]] | None
 
@@ -171,6 +172,7 @@ class ReversiGUI:
         返り値:
         - new_board: 更新された盤面（10x10の2次元リスト）。
         """
+        tmp_board = copy.deepcopy(board)
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 1, 0) + 1):
             board[y][x + i] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 1, 1) + 1):
