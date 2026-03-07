@@ -20,6 +20,7 @@ CPUの手を選択する関数
 - valid_moves: 有効な手が存在する場合は選択された手（タプル (x, y) ）、そうでなければ空のリストを返す。
 """
 
+
 def rival_player_num(player_num):
     """相手プレイヤーの番号を返す関数"""
     return -player_num
@@ -105,23 +106,37 @@ def cpu_algorithm(board, player_num):
         ):  # その(x,y)座標に石を置けるか判定
             valid_moves.append(cordinate)  # 置けるマスとしてリストに追加
 
-
-    for cordinate in [[1, 3], [1, 6],[3, 1], [3, 8], [6, 1], [6, 8]]:  # 1マスずつ走査
+    for cordinate in [[1, 3], [1, 6], [3, 1], [3, 8], [6, 1], [6, 8]]:  # 1マスずつ走査
         if ReversiGUI.validate_reversible(
-            board, player_num, cordinate[0], cordinate[1]
-            if put_disc(board, rival_player_num(player_num), cordinate[0], cordinate[1]) != None else (cordinate[0], cordinate[1])
-        ):  # その(x,y)座標に石を置けるか判定
-            valid_moves.append(cordinate)  # 置けるマスとしてリストに追加        
-
-    for cordinate in [[3, 3], [3, 6],[6, 3], [6, 6]]:  # 1マスずつ走査
-        if ReversiGUI.validate_reversible(
-            board, player_num, cordinate[0], cordinate[1]
-            if put_disc(board, rival_player_num(player_num), cordinate[0], cordinate[1]) != None else (cordinate[0], cordinate[1])
+            board,
+            player_num,
+            cordinate[0],
+            (
+                cordinate[1]
+                if put_disc(
+                    board, rival_player_num(player_num), cordinate[0], cordinate[1]
+                )
+                != None
+                else (cordinate[0], cordinate[1])
+            ),
         ):  # その(x,y)座標に石を置けるか判定
             valid_moves.append(cordinate)  # 置けるマスとしてリストに追加
 
-    if 
-   
+    for cordinate in [[3, 3], [3, 6], [6, 3], [6, 6]]:  # 1マスずつ走査
+        if ReversiGUI.validate_reversible(
+            board,
+            player_num,
+            cordinate[0],
+            (
+                cordinate[1]
+                if put_disc(
+                    board, rival_player_num(player_num), cordinate[0], cordinate[1]
+                )
+                != None
+                else (cordinate[0], cordinate[1])
+            ),
+        ):  # その(x,y)座標に石を置けるか判定
+            valid_moves.append(cordinate)  # 置けるマスとしてリストに追加
 
     for x in range(1, 9):  # 1行ずつ走査
         for y in range(1, 9):  # 1列ずつ走査
@@ -148,8 +163,8 @@ def cpu_algorithm(board, player_num):
 # opponent = cpu_lv0.cpu_lv0  # ランダム
 # opponent = cpu_lv1.cpu_lv1  # 最も多くの石をひっくり返せる手を選ぶ
 # opponent = cpu_lv2.cpu_lv2  # コーナー優先戦略
-#opponent = cpu_lv3.cpu_lv3  # 位置の重み付けに基づいて手を選ぶ
-#opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
+# opponent = cpu_lv3.cpu_lv3  # 位置の重み付けに基づいて手を選ぶ
+# opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
 opponent = cpu_lv5.cpu_lv5  # αβ法で最善手を選ぶモデル
 
 if __name__ == "__main__":
