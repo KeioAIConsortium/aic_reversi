@@ -1,6 +1,6 @@
 from src.Online import Online
 import requests
-from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+from models.spring_2025.best_algorithm import cpu_move  # 過去の優勝モデルを使用
 
 URL = "https://script.google.com/macros/s/AKfycbzCrYJLbnkiMHzNscXcbikvbBX7fOsaF-AlDUk180WS7b75hqHA55lQgFAy8Hn9cAdO/exec"
 

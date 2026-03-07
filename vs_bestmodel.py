@@ -1,5 +1,5 @@
 from src.ReversiGUI import ReversiGUI
-from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+from models.spring_2025.best_algorithm import cpu_move  # 過去の優勝モデルを使用
 
 """
 CPUの手を選択する関数
@@ -20,8 +20,8 @@ CPUの手を選択する関数
 
 過去の優勝モデルと戦う場合：以下を使用
 
-def cpu_algorism(board, player_num):
-    from models.spring_2025.best_algorism import cpu_move  # 過去の優勝モデルを使用
+def cpu_algorithm(board, player_num):
+    from models.spring_2025.best_algorithm import cpu_move  # 過去の優勝モデルを使用
 
     return cpu_move(board, player_num)  # 過去の優勝モデルを使用
 """

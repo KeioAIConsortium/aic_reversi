@@ -13,7 +13,7 @@ class ReversiGUI:
         second_algorithm: Algorithm_type,  # 後手の思考アルゴリズム，Noneの場合は手動
     ):
         """
-        cpu_algorism: CPUの思考アルゴリズムを指定する関数
+        cpu_algorithm: CPUの思考アルゴリズムを指定する関数
             - 引数: board: 盤面の状態（2次元リスト）
             - 引数: player_num: 現在のプレイヤーの番号（1または-1）
             - 返り値: (x, y) の形式で次の手を表すタプル、または置ける手がない場合は空のリスト

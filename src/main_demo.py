@@ -21,7 +21,7 @@ CPUの手を選択する関数
 """
 
 
-def cpu_algorism(
+def cpu_algorithm(
     board: list[list[int]],
     player_num: Literal[1, -1],
 ) -> Tuple[int, int]:
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     ]
     player_num: int = 1  # プレイヤー1の手番
 
-    next_move = cpu_algorism(demo_board, player_num)
+    next_move = cpu_algorithm(demo_board, player_num)
     print("CPUの選択した手:", next_move)
     demo_board[next_move[0]][next_move[1]] = player_num  # CPUの手を盤面に反映
     print("選択後の盤面:")
