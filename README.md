@@ -1,7 +1,8 @@
-# aic_reversi
+# <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="20" /> aic_reversi
 
 リバーシ（オセロ）で AI アルゴリズムを実装して対戦できる教材リポジトリです。  
 `cpu_algorithm` を書き換えるだけで、ローカル対戦・過去モデル対戦・オンライン対戦を試せます。
+![リバーシ画面](assets/image.png)
 
 ## 目次
 - [クイックスタート](#クイックスタート)
