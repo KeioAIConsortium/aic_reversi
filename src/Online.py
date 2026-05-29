@@ -105,7 +105,7 @@ class Online(ReversiGUI):
             else:
                 move = self.second_algorithm(self.board, self.player_num)
 
-            if type(move) is not list or move == []:
+            if not self.is_valid_move_result(move):
                 self.show_message(
                     "エラー",
                     "置ける場所がない状況でアルゴリズムが呼ばれたか，アルゴリズムが手を返しませんでした。",

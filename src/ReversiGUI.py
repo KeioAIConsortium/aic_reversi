@@ -3,7 +3,8 @@ from tkinter import messagebox
 from typing import Callable
 import copy
 
-Algorithm_type = Callable[[list[list[int]], int], list[int, int]] | None
+Move_type = list[int] | tuple[int, int]
+Algorithm_type = Callable[[list[list[int]], int], Move_type] | None
 
 
 class ReversiGUI:
@@ -197,6 +198,10 @@ class ReversiGUI:
         board[y][x] = player_num
         return board
 
+    @staticmethod
+    def is_valid_move_result(move):
+        return isinstance(move, (list, tuple)) and len(move) == 2
+
     def cpu_turn(self):
         # CPUの手番である場合の処理
         if self.check_game_end():
@@ -209,7 +214,7 @@ class ReversiGUI:
             else:
                 move = self.second_algorithm(self.board, self.player_num)
 
-            if type(move) is list and move != []:
+            if self.is_valid_move_result(move):
                 x, y = move
                 self.board = self.put_disc(self.board, self.player_num, x, y)
                 self.pass_count = 0
