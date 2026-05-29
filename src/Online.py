@@ -1,12 +1,13 @@
+from typing import Callable
 from src.ReversiGUI import ReversiGUI, Algorithm_type
 
 
 class Online(ReversiGUI):
     def __init__(
         self,
-        on_put: callable,  # 置いたときのコールバック
-        polling: callable,  # 定期的に呼び出されるコールバック
-        on_init: callable,  # 初期化時のコールバック
+        on_put: Callable,  # 置いたときのコールバック
+        polling: Callable,  # 定期的に呼び出されるコールバック
+        on_init: Callable,  # 初期化時のコールバック
         online_first: bool = False,  # オンラインが先手の場合はTrue、後手の場合はFalse):
         local_algorithm: Algorithm_type = None,  # PC上で動かすアルゴリズム，デフォルトは手動
     ):
@@ -97,52 +98,60 @@ class Online(ReversiGUI):
         # CPUの手番である場合の処理
         if self.check_game_end():
             return
-        if (self.player_num == 1 and self.first_algorithm is not None) or (
-            self.player_num == -1 and self.second_algorithm is not None
-        ):
-            if self.player_num == 1:
-                move = self.first_algorithm(self.board, self.player_num)
-            else:
-                move = self.second_algorithm(self.board, self.player_num)
 
-            if not self.is_valid_move_result(move):
-                self.show_message(
-                    "エラー",
-                    "置ける場所がない状況でアルゴリズムが呼ばれたか，アルゴリズムが手を返しませんでした。",
-                )
-                return
+        algorithm = None
+        if self.player_num == 1:
+            algorithm = self.first_algorithm
+        elif self.player_num == -1:
+            algorithm = self.second_algorithm
 
-            x, y = move
-            success, netboard, _ = self.on_put(self.player_num, y, x)
-            newboard = self.put_disc(self.board, self.player_num, x, y)
-            if not success and netboard != newboard:
-                self.show_message("エラー", "ネットワークエラー")
-                return
+        if algorithm is None:
+            self.show_message(
+                "エラー",
+                "アルゴリズムが設定されていません。",
+            )
+            return
 
-            self.board = newboard
-            self.player_num = self.rival_player_num(self.player_num)
-            self.pass_count = 0
+        move = algorithm(self.board, self.player_num)
+
+        if not self.is_valid_move_result(move):
+            self.show_message(
+                "エラー",
+                "置ける場所がない状況でアルゴリズムが呼ばれたか，アルゴリズムが手を返しませんでした。",
+            )
+            return
+
+        x, y = move
+        success, netboard, _ = self.on_put(self.player_num, y, x)
+        newboard = self.put_disc(self.board, self.player_num, x, y)
+        if not success and netboard != newboard:
+            self.show_message("エラー", "ネットワークエラー")
+            return
+
+        self.board = newboard
+        self.player_num = self.rival_player_num(self.player_num)
+        self.pass_count = 0
+        self.update_board()
+        if self.check_game_end():
             self.update_board()
-            if self.check_game_end():
+            self.gui.after(100, self.show_result)
+            return
+
+        # もし相手が置ける場所がない場合は再帰する
+        if not self.validate_reversible_all(self.board, self.player_num):
+            self.show_message(
+                "パス",
+                f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
+            )
+            self.pass_count += 1
+            if self.pass_count == 2:
                 self.update_board()
                 self.gui.after(100, self.show_result)
                 return
+            self.player_num = self.rival_player_num(self.player_num)
+            # self.cpu_turn()
 
-            # もし相手が置ける場所がない場合は再帰する
-            if not self.validate_reversible_all(self.board, self.player_num):
-                self.show_message(
-                    "パス",
-                    f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
-                )
-                self.pass_count += 1
-                if self.pass_count == 2:
-                    self.update_board()
-                    self.gui.after(100, self.show_result)
-                    return
-                self.player_num = self.rival_player_num(self.player_num)
-                # self.cpu_turn()
-
-            self.gui.after(100, self.check_cpu_move)
+        self.gui.after(100, self.check_cpu_move)
 
     # override
     def on_click(self, event):
