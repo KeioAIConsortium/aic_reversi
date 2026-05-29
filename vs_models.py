@@ -1,3 +1,6 @@
+import tkinter as tk
+from tkinter import messagebox
+
 from src.ReversiGUI import ReversiGUI
 from models.cpu import cpu_lv0, cpu_lv1, cpu_lv2, cpu_lv3, cpu_lv4, cpu_lv5
 
@@ -41,6 +44,34 @@ opponent = cpu_lv0.cpu_lv0  # ランダム
 # opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
 # opponent = cpu_lv5.cpu_lv5  # αβ法で最善手を選ぶモデル
 
+
+def choose_auto_mode():
+    root = tk.Tk()
+    root.withdraw()
+    auto_mode = messagebox.askyesno(
+        "進行モード",
+        "CPUの手を自動で進めますか？\n「いいえ」を選ぶと一手ずつ進めます。",
+        parent=root,
+    )
+    root.destroy()
+    return auto_mode
+
+
+def add_step_button(app):
+    control_frame = tk.Frame(app.gui)
+    control_frame.pack()
+
+    step_button = tk.Button(control_frame, text="次の手", command=app.cpu_turn)
+    step_button.pack()
+
+
 if __name__ == "__main__":
-    app = ReversiGUI(first_algorithm=cpu_algorithm, second_algorithm=opponent)
+    auto_mode = choose_auto_mode()
+    app = ReversiGUI(
+        first_algorithm=cpu_algorithm,
+        second_algorithm=opponent,
+        auto_cpu=auto_mode,
+    )
+    if not auto_mode:
+        add_step_button(app)
     app.gui.mainloop()

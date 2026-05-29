@@ -11,6 +11,7 @@ class ReversiGUI:
         self,
         first_algorithm: Algorithm_type,  # 先手の思考アルゴリズム，Noneの場合は手動
         second_algorithm: Algorithm_type,  # 後手の思考アルゴリズム，Noneの場合は手動
+        auto_cpu: bool = True,  # CPUの手番を自動で進めるかどうか
     ):
         """
         cpu_algorithm: CPUの思考アルゴリズムを指定する関数
@@ -20,6 +21,7 @@ class ReversiGUI:
         """
         self.first_algorithm = first_algorithm
         self.second_algorithm = second_algorithm
+        self.auto_cpu = auto_cpu
 
         self.gui = tk.Tk()
         self.gui.title("リバーシ")
@@ -40,10 +42,11 @@ class ReversiGUI:
         self.gui.update()
 
         # CPU先手の場合は、初回に直接CPUの手番を呼び出す
-        if self.first_algorithm is not None:
-            self.gui.after(100, self.cpu_turn)
-        else:
-            self.gui.after(100, self.check_cpu_move)
+        if self.auto_cpu:
+            if self.first_algorithm is not None:
+                self.gui.after(100, self.cpu_turn)
+            else:
+                self.gui.after(100, self.check_cpu_move)
 
     @staticmethod
     def rival_player_num(player_num):
@@ -243,7 +246,8 @@ class ReversiGUI:
                 self.player_num = self.rival_player_num(self.player_num)
                 # self.cpu_turn()
 
-            self.gui.after(100, self.check_cpu_move)
+            if self.auto_cpu:
+                self.gui.after(100, self.check_cpu_move)
 
     def show_result(self):
         black, white = self.count_discs()
@@ -304,7 +308,8 @@ class ReversiGUI:
             self.pass_count = 0
 
         self.update_board()
-        self.gui.after(100, self.check_cpu_move)  # 次のCPU手番をチェック
+        if self.auto_cpu:
+            self.gui.after(100, self.check_cpu_move)  # 次のCPU手番をチェック
 
     def show_message(self, title: str, message: str):
         messagebox.showinfo(title, message)
