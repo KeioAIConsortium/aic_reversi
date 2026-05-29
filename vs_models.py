@@ -10,6 +10,8 @@ CPUの手を選択する関数
 引数:
 - board: 10x10の2次元リスト形式の盤面。
 - player_num: 現在のプレイヤーの番号（1または-1）。
+- valid_moves: 有効な手のリスト。
+
 
 動作内容:
 - 盤面の内部部分(1,1)～(8,8)の各セルを走査する。
@@ -23,14 +25,7 @@ CPUの手を選択する関数
 """
 
 
-def cpu_algorithm(board, player_num):
-    valid_moves = []  # 置けるマスかを格納するリスト
-    for x in range(1, 9):  # 1行ずつ走査
-        for y in range(1, 9):  # 1列ずつ走査
-            if ReversiGUI.validate_reversible(
-                board, player_num, x, y
-            ):  # その(x,y)座標に石を置けるか判定
-                valid_moves.append([x, y])  # 置けるマスとしてリストに追加
+def cpu_algorithm(board, player_num, valid_moves):
     if valid_moves != []:  # 置けるマスがある場合
         return valid_moves[0]
     return valid_moves
@@ -43,6 +38,8 @@ opponent = cpu_lv0.cpu_lv0  # ランダム
 # opponent = cpu_lv3.cpu_lv3  # 位置の重み付けに基づいて手を選ぶ
 # opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
 # opponent = cpu_lv5.cpu_lv5  # αβ法で最善手を選ぶモデル
+
+################### ここから下は触らない####################
 
 
 def choose_auto_mode():
@@ -65,10 +62,20 @@ def add_step_button(app):
     step_button.pack()
 
 
+def cpu_algorithm_wrapper(board, player_num):
+    global valid_moves
+    valid_moves = []
+    for x in range(1, 9):
+        for y in range(1, 9):
+            if ReversiGUI.validate_reversible(board, x, y, player_num):
+                valid_moves.append((x, y))
+    return cpu_algorithm(board, player_num, valid_moves)
+
+
 if __name__ == "__main__":
     auto_mode = choose_auto_mode()
     app = ReversiGUI(
-        first_algorithm=cpu_algorithm,
+        first_algorithm=cpu_algorithm_wrapper,
         second_algorithm=opponent,
         auto_cpu=auto_mode,
     )
