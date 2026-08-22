@@ -68,19 +68,6 @@ class Online(ReversiGUI):
         else:
             self.gui.after(100, self.check_cpu_move)
 
-        if not self.validate_reversible_all(self.board, self.player_num):
-            self.show_message(
-                "パス",
-                f"{'●' if self.player_num == 1 else '○'}は置ける場所がありません。パスします。",
-            )
-            self.pass_count += 1
-            if self.pass_count == 2:
-                self.update_board()
-                self.gui.after(100, self.show_result)
-                return
-            self.player_num = self.rival_player_num(self.player_num)
-            self.online_turn()
-
     # override
     def check_cpu_move(self):
         if (self.player_num == 1 and self.online_first) or (
@@ -115,7 +102,7 @@ class Online(ReversiGUI):
             x, y = move
             success, netboard, _ = self.on_put(self.player_num, y, x)
             newboard = self.put_disc(self.board, self.player_num, x, y)
-            if not success and netboard != newboard:
+            if not success or netboard != newboard:
                 self.show_message("エラー", "ネットワークエラー")
                 return
 
