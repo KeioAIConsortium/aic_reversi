@@ -174,25 +174,25 @@ class ReversiGUI:
         """
         tmp_board = copy.deepcopy(board)
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 1, 0) + 1):
-            board[y][x + i] = player_num
+            tmp_board[y][x + i] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 1, 1) + 1):
-            board[y + i][x + i] = player_num
+            tmp_board[y + i][x + i] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 0, 1) + 1):
-            board[y + i][x] = player_num
+            tmp_board[y + i][x] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, -1, 1) + 1):
-            board[y + i][x - i] = player_num
+            tmp_board[y + i][x - i] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, -1, 0) + 1):
-            board[y][x - i] = player_num
+            tmp_board[y][x - i] = player_num
         for i in range(
             1, ReversiGUI.count_reverse(board, player_num, x, y, -1, -1) + 1
         ):
-            board[y - i][x - i] = player_num
+            tmp_board[y - i][x - i] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 0, -1) + 1):
-            board[y - i][x] = player_num
+            tmp_board[y - i][x] = player_num
         for i in range(1, ReversiGUI.count_reverse(board, player_num, x, y, 1, -1) + 1):
-            board[y - i][x + i] = player_num
-        board[y][x] = player_num
-        return board
+            tmp_board[y - i][x + i] = player_num
+        tmp_board[y][x] = player_num
+        return tmp_board
 
     def cpu_turn(self):
         # CPUの手番である場合の処理
