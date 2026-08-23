@@ -194,6 +194,34 @@ class ReversiGUI:
         tmp_board[y][x] = player_num
         return tmp_board
 
+    @staticmethod
+    def count_turn(board, player_num, x, y):
+        """
+        石を置いた後にひっくり返せる石の数を数える関数
+
+        引数:
+        - board: 10x10の2次元リスト形式の盤面。
+        - player_num: 現在のプレイヤーの番号（1または-1）。
+        - x, y: 石を置く位置の座標（盤面内部の位置、1～8）。
+
+        動作内容:
+        - 8方向すべてについて、count_reverse関数を用いてひっくり返せる相手の石の数を取得する。
+        - 取得したカウントを合計し、石を置いた後にひっくり返せる総数を求める。
+
+        返り値:
+        - total_count: 石を置いた後にひっくり返せる石の総数（整数）。
+        """
+        total_count = 0
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, 1, 0)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, 1, 1)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, 0, 1)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, -1, 1)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, -1, 0)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, -1, -1)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, 0, -1)
+        total_count += ReversiGUI.count_reverse(board, player_num, x, y, 1, -1)
+        return total_count
+
     def cpu_turn(self):
         # CPUの手番である場合の処理
         if self.check_game_end():
