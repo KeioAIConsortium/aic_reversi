@@ -22,14 +22,15 @@ CPUの手を選択する関数
 """
 
 MODELS = {
-    "cpu_lv0": cpu_lv0.cpu_lv0,  # ランダム
-    "cpu_lv1": cpu_lv1.cpu_lv1,  # 最も多くの石をひっくり返せる手を選ぶ
-    "cpu_lv2": cpu_lv2.cpu_lv2,  # コーナー優先戦略
-    "cpu_lv3": cpu_lv3.cpu_lv3,  # 位置の重み付けに基づいて手を選ぶ
-    "cpu_lv4": cpu_lv4.cpu_lv4,  # 以前の授業での最強モデル
-    "cpu_lv5": cpu_lv5.cpu_lv5,  # αβ法で最善手を選ぶモデル
-    "best_algorithm": best_algorithm,  # 最適なアルゴリズム
-    "alphabeta_algorithm": alphabeta_algorithm,  # αβ法で最善手を選ぶモデル
+    "human": None,  # 人間
+    "lv0": cpu_lv0.cpu_lv0,  # ランダム
+    "lv1": cpu_lv1.cpu_lv1,  # 最も多くの石をひっくり返せる手を選ぶ
+    "lv2": cpu_lv2.cpu_lv2,  # コーナー優先戦略
+    "lv3": cpu_lv3.cpu_lv3,  # 位置の重み付けに基づいて手を選ぶ
+    "lv4": cpu_lv4.cpu_lv4,  # 以前の授業での最強モデル
+    "lv5": cpu_lv5.cpu_lv5,  # αβ法で最善手を選ぶモデル
+    "student_best": best_algorithm,  # 最適なアルゴリズム
+    "alphabeta": alphabeta_algorithm,  # αβ法で最善手を選ぶモデル
 }
 
 
@@ -49,7 +50,7 @@ def cpu_algorithm(board, player_num):
 if __name__ == "__main__":
     model_name = input(f"使用するモデルを選択してください {list(MODELS.keys())}: ")
     app = ReversiGUI(
-        first_algorithm=cpu_algorithm,
-        second_algorithm=MODELS.get(model_name, cpu_algorithm),
+        first_algorithm=(cpu_algorithm, "cpu"),
+        second_algorithm=(MODELS.get(model_name, cpu_algorithm), model_name),
     )
     app.gui.mainloop()

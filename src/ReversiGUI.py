@@ -9,8 +9,14 @@ Algorithm_type = Callable[[list[list[int]], int], list[int, int]] | None
 class ReversiGUI:
     def __init__(
         self,
-        first_algorithm: Algorithm_type,  # 先手の思考アルゴリズム，Noneの場合は手動
-        second_algorithm: Algorithm_type,  # 後手の思考アルゴリズム，Noneの場合は手動
+        # first_algorithm: Algorithm_type,  # 先手の思考アルゴリズム，Noneの場合は手動
+        # second_algorithm: Algorithm_type,  # 後手の思考アルゴリズム，Noneの場合は手動
+        first_algorithm: tuple[
+            Algorithm_type, str
+        ],  # 先手の思考アルゴリズム，Noneの場合は手動
+        second_algorithm: tuple[
+            Algorithm_type, str
+        ],  # 後手の思考アルゴリズム，Noneの場合は手動
     ):
         """
         cpu_algorithm: CPUの思考アルゴリズムを指定する関数
@@ -18,8 +24,8 @@ class ReversiGUI:
             - 引数: player_num: 現在のプレイヤーの番号（1または-1）
             - 返り値: (x, y) の形式で次の手を表すタプル、または置ける手がない場合は空のリスト
         """
-        self.first_algorithm = first_algorithm
-        self.second_algorithm = second_algorithm
+        self.first_algorithm, self.first_algorithm_name = first_algorithm
+        self.second_algorithm, self.second_algorithm_name = second_algorithm
 
         self.gui = tk.Tk()
         self.gui.title("リバーシ")
@@ -33,7 +39,9 @@ class ReversiGUI:
         self.canvas.pack()
         self.canvas.bind("<Button-1>", self.on_click)
 
-        self.info_label = tk.Label(self.gui, text="現在のプレイヤー: ●")
+        self.info_label = tk.Label(
+            self.gui, text=f"現在のプレイヤー: ● ({self.first_algorithm_name})"
+        )
         self.info_label.pack()
 
         self.update_board()
@@ -276,9 +284,10 @@ class ReversiGUI:
     def show_result(self):
         black, white = self.count_discs()
         if black > white:
-            winner = "●の勝ち"
+            # winner = "●の勝ち"
+            winner = f"{self.first_algorithm_name}の勝ち"
         elif black < white:
-            winner = "○の勝ち"
+            winner = f"{self.second_algorithm_name}の勝ち"
         else:
             winner = "引き分け"
         self.show_message(
@@ -415,5 +424,5 @@ class ReversiGUI:
                     )
 
         self.info_label["text"] = (
-            f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'}"
+            f"現在のプレイヤー: {'●' if self.player_num == 1 else '○'} ({self.first_algorithm_name if self.player_num == 1 else self.second_algorithm_name})"
         )
