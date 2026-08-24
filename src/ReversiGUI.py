@@ -29,6 +29,11 @@ class ReversiGUI:
 
         self.gui = tk.Tk()
         self.gui.title("リバーシ")
+        # macOSではTkinterのウィンドウが他アプリの裏に隠れて開くことがあるため、前面に出す
+        self.gui.lift()
+        self.gui.attributes("-topmost", True)
+        self.gui.after_idle(self.gui.attributes, "-topmost", False)
+        self.gui.focus_force()
         self.board: list[list[int]] = (
             self.initialize_board()
         )  # 初期化されたboard配列を取得

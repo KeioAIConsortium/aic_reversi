@@ -1,5 +1,8 @@
+import argparse
+
 import questionary
 from src.ReversiGUI import ReversiGUI
+from src.vs_online import run_online_match
 from model import cpu_algorithm
 from models.cpu import cpu_lv0, cpu_lv1, cpu_lv2, cpu_lv3, cpu_lv4, cpu_lv5
 from models.spring_2026.best_algorithm import cpu_algorithm as best_algorithm
@@ -61,17 +64,34 @@ MODELS = {
         "algorithm": alphabeta_algorithm,
         "description": "αβ法で最善手を選ぶモデル",
     },
+    "online": {
+        "algorithm": None,
+        "description": "LANでオンライン対戦（合言葉で接続）",
+    },
 }
 
 if __name__ == "__main__":
-    model_name = questionary.select(
-        "使用するモデルを選択してください",
-        choices=[
-            questionary.Choice(title=f"{name} - {info['description']}", value=name)
-            for name, info in MODELS.items()
-        ],
-    ).ask()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--model_name",
+        choices=list(MODELS.keys()),
+        help="指定すると選択プロンプトをスキップする",
+    )
+    model_name = parser.parse_args().model_name
+
     if model_name is None:
+        model_name = questionary.select(
+            "使用するモデルを選択してください",
+            choices=[
+                questionary.Choice(title=f"{name} - {info['description']}", value=name)
+                for name, info in MODELS.items()
+            ],
+        ).ask()
+        if model_name is None:
+            raise SystemExit
+
+    if model_name == "online":
+        run_online_match()
         raise SystemExit
 
     app = ReversiGUI(
