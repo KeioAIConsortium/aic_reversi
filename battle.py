@@ -23,17 +23,6 @@ CPUの手を選択する関数
 - valid_moves: 有効な手が存在する場合は選択された手（タプル (x, y) ）、そうでなければ空のリストを返す。
 """
 
-# MODELS = {
-#     "human": None,  # 人間
-#     "lv0": cpu_lv0.cpu_lv0,  # ランダム
-#     "lv1": cpu_lv1.cpu_lv1,  # 最も多くの石をひっくり返せる手を選ぶ
-#     "lv2": cpu_lv2.cpu_lv2,  # コーナー優先戦略
-#     "lv3": cpu_lv3.cpu_lv3,  # 位置の重み付けに基づいて手を選ぶ
-#     "lv4": cpu_lv4.cpu_lv4,  # 以前の授業での最強モデル
-#     "lv5": cpu_lv5.cpu_lv5,  # αβ法で最善手を選ぶモデル
-#     "student_best": best_algorithm,  # 最適なアルゴリズム
-#     "alphabeta": alphabeta_algorithm,  # αβ法で最善手を選ぶモデル
-# }
 
 MODELS = {
     "human": {
@@ -75,10 +64,6 @@ MODELS = {
 }
 
 if __name__ == "__main__":
-    # model_name = questionary.select(
-    #     "使用するモデルを選択してください",
-    #     choices=list(MODELS.keys()),
-    # ).ask()
     model_name = questionary.select(
         "使用するモデルを選択してください",
         choices=[
