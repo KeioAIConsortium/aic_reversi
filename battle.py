@@ -86,6 +86,8 @@ if __name__ == "__main__":
                 questionary.Choice(title=f"{name} - {info['description']}", value=name)
                 for name, info in MODELS.items()
             ],
+            use_search_filter=True,
+            use_jk_keys=False,
         ).ask()
         if model_name is None:
             raise SystemExit
