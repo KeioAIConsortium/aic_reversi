@@ -52,7 +52,7 @@ uv run vs_models.py
 
 ## アルゴリズム実装
 
-各スクリプトの `cpu_algorithm(board, player_num)` を編集してください。  
+`model.py` の `cpu_algorithm(board, player_num)` を編集してください。  
 最小構成は次のとおりです（`vs_human.py` などで同様に使えます）。
 
 ```python
@@ -85,18 +85,6 @@ $ uv run vs_models.py
 ```
 
 上下の矢印キーで対戦相手を選び、Enter キーで決定してください。
-
-| 選択肢 | 対戦相手 |
-| --- | --- |
-| `human` | 人間 |
-| `lv0` | ランダムに手を選ぶCPU |
-| `lv1` | ひっくり返せる石の数を優先するCPU |
-| `lv2` | コーナーを優先するCPU |
-| `lv3` | 位置の重み付けを使うCPU |
-| `lv4` | 過去の授業で使われた強いCPU |
-| `lv5` | αβ法を使うCPU |
-| `student_best` | 過去大会の優勝モデル |
-| `alphabeta` | αβ法のモデル |
 
 ### オンライン対戦の先後（`online_battle.py`）
 ```python
