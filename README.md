@@ -32,7 +32,7 @@ uv sync
 
 ### 3. まずは人間対戦を起動
 ```sh
-uv run vs_models.py
+uv run battle.py
 ```
 
 起動後に `questionary` の選択メニューが表示されます。上下の矢印キーで
@@ -47,7 +47,7 @@ uv run vs_models.py
 | --- | --- | --- | --- |
 | 人間 vs 自作CPU | `vs_human.py` | `uv run python vs_human.py` | まず動作確認する基本モード |
 | 過去優勝モデル vs 自作CPU | `vs_bestmodel.py` | `uv run python vs_bestmodel.py` | 強い既存モデルと直接比較 |
-| 選択した相手 vs 自作CPU | `vs_models.py` | `uv run vs_models.py` | 人間や各レベルのCPUなどからメニューで選択 |
+| 選択した相手 vs 自作CPU | `battle.py` | `uv run battle.py` | 人間や各レベルのCPUなどからメニューで選択 |
 | オンライン対戦 | `online_battle.py` | `uv run python online_battle.py` | ネットワーク経由で対戦 |
 
 ## アルゴリズム実装
@@ -74,9 +74,9 @@ def cpu_algorithm(board, player_num):
 from models.spring_2026.best_algorithm import cpu_algorithm as best_algorithm # 過去の優勝モデルを使用
 ```
 
-### 対戦相手を選択する（`vs_models.py`）
+### 対戦相手を選択する（`battle.py`）
 ```console
-$ uv run vs_models.py
+$ uv run battle.py
 ? 使用するモデルを選択してください (Use arrow keys)
  » human
    lv0
@@ -104,7 +104,7 @@ aic_reversi/
 │   └── spring_2026/      # 過去大会モデル
 ├── vs_human.py
 ├── vs_bestmodel.py
-├── vs_models.py
+├── battle.py
 └── online_battle.py
 ```
 
