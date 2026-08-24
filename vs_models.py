@@ -1,5 +1,7 @@
 from src.ReversiGUI import ReversiGUI
 from models.cpu import cpu_lv0, cpu_lv1, cpu_lv2, cpu_lv3, cpu_lv4, cpu_lv5
+from models.spring_2026.best_algorithm import cpu_algorithm as best_algorithm
+from models.alphabeta.alphabeta import cpu_algorithm as alphabeta_algorithm
 
 """
 CPUの手を選択する関数
@@ -19,6 +21,17 @@ CPUの手を選択する関数
 - valid_moves: 有効な手が存在する場合は選択された手（タプル (x, y) ）、そうでなければ空のリストを返す。
 """
 
+MODELS = {
+    "cpu_lv0": cpu_lv0.cpu_lv0,  # ランダム
+    "cpu_lv1": cpu_lv1.cpu_lv1,  # 最も多くの石をひっくり返せる手を選ぶ
+    "cpu_lv2": cpu_lv2.cpu_lv2,  # コーナー優先戦略
+    "cpu_lv3": cpu_lv3.cpu_lv3,  # 位置の重み付けに基づいて手を選ぶ
+    "cpu_lv4": cpu_lv4.cpu_lv4,  # 以前の授業での最強モデル
+    "cpu_lv5": cpu_lv5.cpu_lv5,  # αβ法で最善手を選ぶモデル
+    "best_algorithm": best_algorithm,  # 最適なアルゴリズム
+    "alphabeta_algorithm": alphabeta_algorithm,  # αβ法で最善手を選ぶモデル
+}
+
 
 def cpu_algorithm(board, player_num):
     valid_moves = []  # 置けるマスかを格納するリスト
@@ -33,14 +46,10 @@ def cpu_algorithm(board, player_num):
     return valid_moves
 
 
-# 相手のモデルをここで選択
-opponent = cpu_lv0.cpu_lv0  # ランダム
-# opponent = cpu_lv1.cpu_lv1  # 最も多くの石をひっくり返せる手を選ぶ
-# opponent = cpu_lv2.cpu_lv2  # コーナー優先戦略
-# opponent = cpu_lv3.cpu_lv3  # 位置の重み付けに基づいて手を選ぶ
-# opponent = cpu_lv4.cpu_lv4  # 以前の授業での最強モデル
-# opponent = cpu_lv5.cpu_lv5  # αβ法で最善手を選ぶモデル
-
 if __name__ == "__main__":
-    app = ReversiGUI(first_algorithm=cpu_algorithm, second_algorithm=opponent)
+    model_name = input(f"使用するモデルを選択してください {list(MODELS.keys())}: ")
+    app = ReversiGUI(
+        first_algorithm=cpu_algorithm,
+        second_algorithm=MODELS.get(model_name, cpu_algorithm),
+    )
     app.gui.mainloop()
