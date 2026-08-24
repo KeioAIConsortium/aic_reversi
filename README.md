@@ -32,8 +32,11 @@ uv sync
 
 ### 3. まずは人間対戦を起動
 ```sh
-uv run python vs_human.py
+uv run vs_models.py
 ```
+
+起動後に `questionary` の選択メニューが表示されます。上下の矢印キーで
+`human` を選び、Enter キーで決定します。
 
 `tkinter` 非対応の Python では GUI が表示されません。  
 画面が出ない場合は、`tkinter` を含む Python 環境を利用してください。
@@ -44,7 +47,7 @@ uv run python vs_human.py
 | --- | --- | --- | --- |
 | 人間 vs 自作CPU | `vs_human.py` | `uv run python vs_human.py` | まず動作確認する基本モード |
 | 過去優勝モデル vs 自作CPU | `vs_bestmodel.py` | `uv run python vs_bestmodel.py` | 強い既存モデルと直接比較 |
-| レベル別CPU vs 自作CPU | `vs_models.py` | `uv run python vs_models.py` | 難易度を変えて段階的に検証 |
+| 選択した相手 vs 自作CPU | `vs_models.py` | `uv run vs_models.py` | 人間や各レベルのCPUなどからメニューで選択 |
 | オンライン対戦 | `online_battle.py` | `uv run python online_battle.py` | ネットワーク経由で対戦 |
 
 ## アルゴリズム実装
@@ -71,15 +74,29 @@ def cpu_algorithm(board, player_num):
 from models.spring_2026.best_algorithm import cpu_algorithm as best_algorithm # 過去の優勝モデルを使用
 ```
 
-### レベル別モデルを切り替える（`vs_models.py`）
-```python
-opponent = cpu_lv0.cpu_lv0  # ランダム
-# opponent = cpu_lv1.cpu_lv1  # ひっくり返せる石の数を優先
-# opponent = cpu_lv2.cpu_lv2  # コーナー優先
-# opponent = cpu_lv3.cpu_lv3  # 位置の重み付け
-# opponent = cpu_lv4.cpu_lv4  # 授業内の強モデル
-# opponent = cpu_lv5.cpu_lv5  # αβ法
+### 対戦相手を選択する（`vs_models.py`）
+```console
+$ uv run vs_models.py
+? 使用するモデルを選択してください (Use arrow keys)
+ » human
+   lv0
+   lv1
+   ...
 ```
+
+上下の矢印キーで対戦相手を選び、Enter キーで決定してください。
+
+| 選択肢 | 対戦相手 |
+| --- | --- |
+| `human` | 人間 |
+| `lv0` | ランダムに手を選ぶCPU |
+| `lv1` | ひっくり返せる石の数を優先するCPU |
+| `lv2` | コーナーを優先するCPU |
+| `lv3` | 位置の重み付けを使うCPU |
+| `lv4` | 過去の授業で使われた強いCPU |
+| `lv5` | αβ法を使うCPU |
+| `student_best` | 過去大会の優勝モデル |
+| `alphabeta` | αβ法のモデル |
 
 ### オンライン対戦の先後（`online_battle.py`）
 ```python

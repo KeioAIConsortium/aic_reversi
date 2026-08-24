@@ -1,3 +1,4 @@
+import questionary
 from src.ReversiGUI import ReversiGUI
 from models.cpu import cpu_lv0, cpu_lv1, cpu_lv2, cpu_lv3, cpu_lv4, cpu_lv5
 from models.spring_2026.best_algorithm import cpu_algorithm as best_algorithm
@@ -48,7 +49,13 @@ def cpu_algorithm(board, player_num):
 
 
 if __name__ == "__main__":
-    model_name = input(f"使用するモデルを選択してください {list(MODELS.keys())}: ")
+    model_name = questionary.select(
+        "使用するモデルを選択してください",
+        choices=list(MODELS.keys()),
+    ).ask()
+    if model_name is None:
+        raise SystemExit
+
     app = ReversiGUI(
         first_algorithm=(cpu_algorithm, "cpu"),
         second_algorithm=(MODELS.get(model_name, cpu_algorithm), model_name),
